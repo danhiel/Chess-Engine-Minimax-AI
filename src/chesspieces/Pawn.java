@@ -1,0 +1,124 @@
+package chesspieces;
+
+import chessboard.Tile;
+import gamestate.MoveHistory;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+/**
+ * The class tracks basic information such as team color,
+ * piece position, piece value, and first move for the pawn.
+ * Also calculates all the possible legal moves for the pawn
+ * at its current position.
+ *
+ * @author  Danhiel Vu
+ * @version 2.0
+ * @since   1/23/2020
+ */
+public class Pawn extends Piece {
+
+    private static final int[] PAWN_MOVE_SET = {8, 16, 7, 9};
+    private static final int PIECE_VALUE = 1;
+    private boolean isFirstMove;
+    private Stack<MoveHistory> moveHistory;
+
+    public Pawn(boolean isWhitePiece, int piecePosition,
+                Stack<MoveHistory> moveHistory) {
+        super(isWhitePiece, piecePosition);
+        this.moveHistory = moveHistory;
+        isFirstMove = true;
+    }
+
+    public boolean isFirstMove() {
+        return isFirstMove;
+    }
+
+    public void setIsFirstMove(boolean isFirstMove) {
+        this.isFirstMove = isFirstMove;
+    }
+
+    @Override
+    public String getPieceType() {
+        return "Pawn";
+    }
+
+    @Override
+    public int getPieceValue() {
+        return PIECE_VALUE;
+    }
+
+    @Override
+    public List<Integer> getAllMoves(Tile[] chessBoard) {
+        List<Integer> allMoves = new ArrayList<Integer>();
+
+        for (int move : PAWN_MOVE_SET) {
+            int finalPosition = piecePosition + getRespectiveMove(move);
+
+            if (isWithinLegalColumns(finalPosition, piecePosition)) {
+                addNormalMoves(allMoves, chessBoard, finalPosition, move);
+                addAttackMoves(allMoves, chessBoard, finalPosition, move);
+            }
+        }
+        return allMoves;
+    }
+
+    private int getRespectiveMove(int move) {
+        if (isPieceWhite()) {
+            return move * -1;
+        }
+        return move;
+    }
+
+    private void addNormalMoves(List<Integer> allMoves, Tile[] chessBoard,
+                                      int finalPosition, int move) {
+        if (chessBoard[finalPosition].getAssignedPiece() == null) {
+            if (move == 8) {
+                allMoves.add(finalPosition);
+
+            } else if ((move == 16) && isFirstMove && chessBoard[piecePosition
+                    + getRespectiveMove(8)].getAssignedPiece() == null) {
+                allMoves.add(finalPosition);
+            }
+        }
+    }
+
+    private void addAttackMoves(List<Integer> allMoves, Tile[] chessBoard,
+                                      int finalPosition, int move) {
+        if ((move == 7 || move == 9)) {
+            if (isEnemy(chessBoard[finalPosition])) {
+                allMoves.add(finalPosition);
+
+            } else if (isWithinEnpassantRows()
+                    && isEnpassantLegal(chessBoard, move)) {
+                allMoves.add(finalPosition);
+            }
+        }
+    }
+
+    private boolean isWithinEnpassantRows() {
+        return isPieceWhite() && (piecePosition >= 24 && piecePosition <= 31)
+                || !this.isPieceWhite() && (piecePosition >= 32 && piecePosition <= 39);
+    }
+
+    private boolean isEnpassantLegal(Tile[] chessBoard, int move) {
+        if (!moveHistory.isEmpty()) {
+            MoveHistory recentMove = moveHistory.peek();
+
+            if (recentMove.isFirstMove() && recentMove.getPieceMoved()
+                    .getPieceType().equals("Pawn")) {
+
+                Piece recentPiece = recentMove.getPieceMoved();
+                Piece enpassantPiece = null;
+                if ((move == 7 && isPieceWhite()) || (move == 9 && !isPieceWhite())) {
+                    enpassantPiece = chessBoard[piecePosition + 1].getAssignedPiece();
+                } else if ((move == 9 && isPieceWhite()) || (move == 7 && !isPieceWhite())) {
+                    enpassantPiece = chessBoard[piecePosition - 1].getAssignedPiece();
+                }
+
+                return recentPiece == enpassantPiece;
+            }
+        }
+        return false;
+    }
+}
