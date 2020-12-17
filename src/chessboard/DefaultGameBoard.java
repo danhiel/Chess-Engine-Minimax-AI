@@ -13,7 +13,7 @@ import java.util.Stack;
  * @version 2.0
  * @since   1/23/2020
  */
-public class GameBoard {
+public class DefaultGameBoard {
     
     private static final Piece WHITE_LEFT_ROOK = new Rook(true,  56);
     private static final Piece WHITE_RIGHT_ROOK = new Rook(true, 63);
@@ -31,7 +31,7 @@ public class GameBoard {
     private final Piece[] whitePiecesSet;
     private final Piece[] blackPiecesSet;
 
-    public GameBoard(final Stack<MoveHistory> moveHistory) {
+    public DefaultGameBoard(final Stack<MoveHistory> moveHistory) {
         this.moveHistory = moveHistory;
         standardBoard = setUpStandardBoard();
         chessBoard = setUpMainBoard();
