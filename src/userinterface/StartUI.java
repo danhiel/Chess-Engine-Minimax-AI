@@ -16,18 +16,12 @@ import java.awt.event.ActionListener;
 import java.util.Stack;
 
 public class StartUI {
-    private final Stack<MoveHistory> moveHistory;
-    private final DefaultGameBoard gameBoard;
-
     private final JFrame frame;
     private final JPanel mainPanel;
     private final JButton buttonWhiteSide;
     private final JButton buttonBlackSide;
 
     public StartUI() {
-        this.moveHistory = new Stack<MoveHistory>();
-        this.gameBoard = new DefaultGameBoard(moveHistory);
-
         this.frame = new JFrame("Chess");
         this.mainPanel = new JPanel();
         this.buttonWhiteSide = new JButton("White Side");
@@ -68,7 +62,8 @@ public class StartUI {
     }
 
     /**
-     * Sets up buttons and action when clicked.
+     * Sets up buttons and action when clicked. When button is clicked,
+     * the player chosed a side and the Chess game will commence.
      */
     private void setUpButtons() {
         // Center buttons
@@ -78,6 +73,9 @@ public class StartUI {
         buttonWhiteSide.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Stack<MoveHistory> moveHistory = new Stack<MoveHistory>();
+                DefaultGameBoard gameBoard = new DefaultGameBoard(moveHistory);
+
                 frame.dispose();
             }
         });
@@ -88,7 +86,6 @@ public class StartUI {
                 frame.dispose();
             }
         });
-
 
         // Add buttons to main panel
         mainPanel.add(buttonWhiteSide);

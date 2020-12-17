@@ -14,33 +14,36 @@ import java.util.Stack;
  * @since   1/23/2020
  */
 public class DefaultGameBoard {
-    
-    private static final Piece WHITE_LEFT_ROOK = new Rook(true,  56);
-    private static final Piece WHITE_RIGHT_ROOK = new Rook(true, 63);
-    private static final Piece WHITE_KING = new King(true, 60,
-            WHITE_LEFT_ROOK, WHITE_RIGHT_ROOK);;
-
-    private static final Piece BLACK_LEFT_ROOK = new Rook(false, 0);
-    private static final Piece BLACK_RIGHT_ROOK = new Rook(false,7);
-    private static final Piece BLACK_KING = new King(false, 4,
-            BLACK_LEFT_ROOK, BLACK_RIGHT_ROOK);
 
     private final Stack<MoveHistory> moveHistory;
-    private final Piece[] standardBoard;
-    private final Tile[] chessBoard;
+    private final Piece[] standardDefaultBoard;
+    private final Tile[] mainChessBoard;
+
+    private final Piece allyLeftRook;
+    private final Piece allyRightRook;
+    private final Piece allyKing;
+    private final Piece enemyLeftRook;
+    private final Piece enemyRightRook;
+    private final Piece enemyKing;
+
     private final Piece[] whitePiecesSet;
     private final Piece[] blackPiecesSet;
 
-    public DefaultGameBoard(final Stack<MoveHistory> moveHistory) {
+    public DefaultGameBoard(final Stack<MoveHistory> moveHistory,
+                            boolean playerWhiteSide) {
         this.moveHistory = moveHistory;
-        standardBoard = setUpStandardBoard();
-        chessBoard = setUpMainBoard();
+        this.standardDefaultBoard = setUpStandardBoard(playerWhiteSide);
+        this.mainChessBoard = setUpMainBoard();
+
+        allyKing = new King(playerWhiteSide, 60);;
+        enemyKing = new King(playerWhiteSide == false, 4);
+
         whitePiecesSet = saveChessPieces(0);
-        blackPiecesSet = saveChessPieces(16);
+        blackPiecesSet = saveChessPieces(48);
     }
 
     public Tile[] getChessBoard() {
-        return chessBoard;
+        return mainChessBoard;
     }
     
     public Piece[] getWhitePieces() {
@@ -54,7 +57,7 @@ public class DefaultGameBoard {
     private Tile[] setUpMainBoard() {
         Tile[] chessBoard = new Tile[64];
         for (int i = 0; i < chessBoard.length; i++) {
-            chessBoard[i] = new Tile(i, standardBoard[i]);
+            chessBoard[i] = new Tile(i, standardDefaultBoard[i]);
         }
         return chessBoard;
     }
@@ -62,35 +65,35 @@ public class DefaultGameBoard {
     private Piece[] saveChessPieces(int index) {
         Piece[] chessPieces = new Piece[16];
         for (int i = index; i < index + 16; i++) {
-            chessPieces[i - index] = chessBoard[i].getAssignedPiece();
+            chessPieces[i - index] = mainChessBoard[i].getAssignedPiece();
         }
         return chessPieces;
     }
 
-    private Piece[] setUpStandardBoard() {
+    private Piece[] setUpStandardBoard(boolean playerWhiteSide) {
         Piece[] standardBoard = new Piece[64];
-        standardBoard[0] = BLACK_LEFT_ROOK;
-        standardBoard[1] = new Knight(false, 1);
-        standardBoard[2] = new Bishop(false, 2);
-        standardBoard[3] = new Queen(false, 3);
-        standardBoard[4] = BLACK_KING;
-        standardBoard[5] = new Bishop(false, 5);
-        standardBoard[6] = new Knight(false, 6);
-        standardBoard[7] = BLACK_RIGHT_ROOK;
+        standardBoard[0] = new Rook(playerWhiteSide == false, 0);
+        standardBoard[1] = new Knight(playerWhiteSide == false, 1);
+        standardBoard[2] = new Bishop(playerWhiteSide == false, 2);
+        standardBoard[3] = new Queen(playerWhiteSide == false, 3);
+        standardBoard[4] = enemyKing;
+        standardBoard[5] = new Bishop(playerWhiteSide == false, 5);
+        standardBoard[6] = new Knight(playerWhiteSide == false, 6);
+        standardBoard[7] = new Rook(playerWhiteSide == false, 7);
 
         for (int i = 8; i < 16; i++) {
-            standardBoard[i] = (new Pawn(false, i, moveHistory));
-            standardBoard[i + 40] = (new Pawn(true, i + 40, moveHistory));
+            standardBoard[i] = (new Pawn(playerWhiteSide == false, i, moveHistory));
+            standardBoard[i + 40] = (new Pawn(playerWhiteSide, i + 40, moveHistory));
         }
 
-        standardBoard[56] = WHITE_LEFT_ROOK;
-        standardBoard[57] = new Knight(true, 57);
-        standardBoard[58] = new Bishop(true, 58);
-        standardBoard[59] = new Queen(true, 59);
-        standardBoard[60] = WHITE_KING;
-        standardBoard[61] = new Bishop(true, 61);
-        standardBoard[62] = new Knight(true, 62);
-        standardBoard[63] = WHITE_RIGHT_ROOK;
+        standardBoard[56] = new Rook(playerWhiteSide, 56);
+        standardBoard[57] = new Knight(playerWhiteSide, 57);
+        standardBoard[58] = new Bishop(playerWhiteSide, 58);
+        standardBoard[59] = new Queen(playerWhiteSide, 59);
+        standardBoard[60] = allyKing;
+        standardBoard[61] = new Bishop(playerWhiteSide, 61);
+        standardBoard[62] = new Knight(playerWhiteSide, 62);
+        standardBoard[63] = new Rook(playerWhiteSide, 63);
 
         return standardBoard;
     }
