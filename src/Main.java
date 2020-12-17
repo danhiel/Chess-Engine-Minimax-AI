@@ -9,7 +9,7 @@ import java.util.Stack;
 
 /**
  * The program allows the user to play a game of Chess
- * either locally or against an AI.
+ * against an Min-max AI.
  *
  * @author  Danhiel Vu
  * @version 2.0
