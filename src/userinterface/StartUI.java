@@ -26,7 +26,7 @@ public class StartUI {
 
     public StartUI() {
         this.moveHistory = new Stack<MoveHistory>();
-        this.gameBoard = new DefaultGameBoard();
+        this.gameBoard = new DefaultGameBoard(moveHistory);
 
         this.frame = new JFrame("Chess");
         this.mainPanel = new JPanel();
