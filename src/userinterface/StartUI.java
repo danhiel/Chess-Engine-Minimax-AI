@@ -74,7 +74,7 @@ public class StartUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Stack<MoveHistory> moveHistory = new Stack<MoveHistory>();
-                DefaultGameBoard gameBoard = new DefaultGameBoard(moveHistory);
+                DefaultGameBoard gameBoard = new DefaultGameBoard(moveHistory, true);
 
                 frame.dispose();
             }
@@ -83,6 +83,8 @@ public class StartUI {
         buttonBlackSide.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Stack<MoveHistory> moveHistory = new Stack<MoveHistory>();
+                DefaultGameBoard gameBoard = new DefaultGameBoard(moveHistory, false);
                 frame.dispose();
             }
         });

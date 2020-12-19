@@ -18,25 +18,15 @@ public class DefaultGameBoard {
     private final Stack<MoveHistory> moveHistory;
     private final Piece[] standardDefaultBoard;
     private final Tile[] mainChessBoard;
-
-    private final Piece allyLeftRook;
-    private final Piece allyRightRook;
-    private final Piece allyKing;
-    private final Piece enemyLeftRook;
-    private final Piece enemyRightRook;
-    private final Piece enemyKing;
-
+    
     private final Piece[] whitePiecesSet;
     private final Piece[] blackPiecesSet;
 
     public DefaultGameBoard(final Stack<MoveHistory> moveHistory,
-                            boolean playerWhiteSide) {
+                            boolean isPlayerWhiteSide) {
         this.moveHistory = moveHistory;
-        this.standardDefaultBoard = setUpStandardBoard(playerWhiteSide);
+        this.standardDefaultBoard = setUpStandardBoard(isPlayerWhiteSide);
         this.mainChessBoard = setUpMainBoard();
-
-        allyKing = new King(playerWhiteSide, 60);;
-        enemyKing = new King(playerWhiteSide == false, 4);
 
         whitePiecesSet = saveChessPieces(0);
         blackPiecesSet = saveChessPieces(48);
@@ -70,30 +60,35 @@ public class DefaultGameBoard {
         return chessPieces;
     }
 
-    private Piece[] setUpStandardBoard(boolean playerWhiteSide) {
+    private Piece[] setUpStandardBoard(boolean isPlayerWhiteSide) {
         Piece[] standardBoard = new Piece[64];
-        standardBoard[0] = new Rook(playerWhiteSide == false, 0);
-        standardBoard[1] = new Knight(playerWhiteSide == false, 1);
-        standardBoard[2] = new Bishop(playerWhiteSide == false, 2);
-        standardBoard[3] = new Queen(playerWhiteSide == false, 3);
-        standardBoard[4] = enemyKing;
-        standardBoard[5] = new Bishop(playerWhiteSide == false, 5);
-        standardBoard[6] = new Knight(playerWhiteSide == false, 6);
-        standardBoard[7] = new Rook(playerWhiteSide == false, 7);
+        boolean startBotSide = true;
+        boolean startTopSide = false;
+
+        standardBoard[0] = new Rook(isPlayerWhiteSide == false, startTopSide, 0);
+        standardBoard[1] = new Knight(isPlayerWhiteSide == false, startTopSide, 1);
+        standardBoard[2] = new Bishop(isPlayerWhiteSide == false, startTopSide, 2);
+        standardBoard[3] = new Queen(isPlayerWhiteSide == false, startTopSide, 3);
+        standardBoard[4] = new King(isPlayerWhiteSide == false, startTopSide, 4);
+        standardBoard[5] = new Bishop(isPlayerWhiteSide == false, startTopSide, 5);
+        standardBoard[6] = new Knight(isPlayerWhiteSide == false, startTopSide, 6);
+        standardBoard[7] = new Rook(isPlayerWhiteSide == false, startTopSide, 7);
 
         for (int i = 8; i < 16; i++) {
-            standardBoard[i] = (new Pawn(playerWhiteSide == false, i, moveHistory));
-            standardBoard[i + 40] = (new Pawn(playerWhiteSide, i + 40, moveHistory));
+            standardBoard[i] = (new Pawn(isPlayerWhiteSide == false,
+                                         startTopSide, i, moveHistory));
+            standardBoard[i + 40] = (new Pawn(isPlayerWhiteSide,
+                                              startBotSide, i + 40, moveHistory));
         }
 
-        standardBoard[56] = new Rook(playerWhiteSide, 56);
-        standardBoard[57] = new Knight(playerWhiteSide, 57);
-        standardBoard[58] = new Bishop(playerWhiteSide, 58);
-        standardBoard[59] = new Queen(playerWhiteSide, 59);
-        standardBoard[60] = allyKing;
-        standardBoard[61] = new Bishop(playerWhiteSide, 61);
-        standardBoard[62] = new Knight(playerWhiteSide, 62);
-        standardBoard[63] = new Rook(playerWhiteSide, 63);
+        standardBoard[56] = new Rook(isPlayerWhiteSide, startBotSide, 56);
+        standardBoard[57] = new Knight(isPlayerWhiteSide, startBotSide, 57);
+        standardBoard[58] = new Bishop(isPlayerWhiteSide, startBotSide, 58);
+        standardBoard[59] = new Queen(isPlayerWhiteSide, startBotSide, 59);
+        standardBoard[60] = new King(isPlayerWhiteSide, startBotSide, 60);
+        standardBoard[61] = new Bishop(isPlayerWhiteSide, startBotSide, 61);
+        standardBoard[62] = new Knight(isPlayerWhiteSide, startBotSide, 62);
+        standardBoard[63] = new Rook(isPlayerWhiteSide, startBotSide, 63);
 
         return standardBoard;
     }

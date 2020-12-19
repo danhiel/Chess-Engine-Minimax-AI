@@ -17,18 +17,11 @@ import java.util.List;
 public class King extends Piece {
 
     private static final int[] KING_MOVE_SET = {-9, -8, -7, -1, 1, 7, 8, 9};
-    private static final int[] WHITE_CASTLE_MOVE_SET = {58, 59, 62, 61};
-    private static final int[] BLACK_CASTLE_MOVE_SET = {2, 3, 5, 6};
     private static final int PIECE_VALUE = 10;
-    private Rook leftRook;
-    private Rook rightRook;
     private boolean isFirstMove;
 
-    public King(boolean isWhitePiece, int piecePosition,
-                Piece firstRook, Piece secondRook) {
-        super(isWhitePiece, piecePosition);
-        this.leftRook = (Rook) firstRook;
-        this.rightRook = (Rook) secondRook;
+    public King(boolean isWhitePiece, boolean isBotSide, int piecePosition) {
+        super(isWhitePiece, isBotSide, piecePosition);
         isFirstMove = true;
     }
 
@@ -66,23 +59,53 @@ public class King extends Piece {
     private void addNormalMoves(List<Integer> allMoves, Tile[] chessBoard, int finalPosition) {
         if (isWithinLegalColumns(finalPosition, piecePosition)
                 && (chessBoard[finalPosition].getAssignedPiece() == null
-                || isEnemy(chessBoard[finalPosition]))) {
+                    || isEnemy(chessBoard[finalPosition]))) {
             allMoves.add(finalPosition);
         }
     }
 
     private void addCastlingMoves(List<Integer> allMoves, Tile[] chessBoard) {
         if (isFirstMove) {
-            if (leftRook.isFirstMove() && checkIfLeftCastlingLegal(chessBoard)) {
+            Rook leftRook = getRook(chessBoard, true);
+            Rook rightRook = getRook(chessBoard, false);
+
+            if (leftRook != null 
+                    && leftRook.isFirstMove() 
+                    && checkIfLeftCastlingLegal(chessBoard, leftRook)) {
                 allMoves.add(piecePosition - 2);
             }
-            if (rightRook.isFirstMove() && checkIfRightCastlingLegal(chessBoard)) {
+            if (rightRook != null 
+                    && rightRook.isFirstMove()
+                    && checkIfRightCastlingLegal(chessBoard, rightRook)) {
                 allMoves.add(piecePosition + 2);
             }
         }
     }
 
-    private boolean checkIfLeftCastlingLegal(Tile[] chessBoard) {
+    private Rook getRook(Tile[] chessBoard, boolean isLeftSide) {
+        int rookPosition = getRookPosition(isLeftSide);
+        Piece chessPiece = chessBoard[rookPosition].getAssignedPiece();
+        if (chessPiece.getPieceType() == "Rook") {
+            return (Rook) chessPiece;
+        }
+        return null;
+    }
+
+    private int getRookPosition(boolean isLeftSide) {
+        int rookPosition = -1;
+        if (IS_BOT_SIDE && isLeftSide) {
+            rookPosition = 56;
+        } else if (IS_BOT_SIDE && !isLeftSide) {
+            rookPosition = 63;
+        } else if (IS_BOT_SIDE && isLeftSide) {
+            rookPosition = 0;
+        } else {
+            rookPosition = 7;
+        }
+        return rookPosition;
+    }
+
+    private boolean checkIfLeftCastlingLegal(Tile[] chessBoard, Rook leftRook) {
         for (int i = leftRook.piecePosition + 1; i < this.piecePosition; i++) {
             if (chessBoard[i].getAssignedPiece() != null) {
                 return false;
@@ -91,7 +114,7 @@ public class King extends Piece {
         return true;
     }
 
-    private boolean checkIfRightCastlingLegal(Tile[] chessBoard) {
+    private boolean checkIfRightCastlingLegal(Tile[] chessBoard, Rook rightRook) {
         for (int i = rightRook.piecePosition - 1; i > this.piecePosition; i--) {
             if (chessBoard[i].getAssignedPiece() != null) {
                 return false;

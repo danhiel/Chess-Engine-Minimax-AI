@@ -23,9 +23,9 @@ public class Pawn extends Piece {
     private boolean isFirstMove;
     private Stack<MoveHistory> moveHistory;
 
-    public Pawn(boolean isWhitePiece, int piecePosition,
+    public Pawn(boolean isWhitePiece, boolean isBotSide, int piecePosition, 
                 Stack<MoveHistory> moveHistory) {
-        super(isWhitePiece, piecePosition);
+        super(isWhitePiece, isBotSide, piecePosition);
         this.moveHistory = moveHistory;
         isFirstMove = true;
     }
@@ -64,7 +64,7 @@ public class Pawn extends Piece {
     }
 
     private int getRespectiveMove(int move) {
-        if (isPieceWhite()) {
+        if (IS_BOT_SIDE) {
             return move * -1;
         }
         return move;
@@ -97,8 +97,8 @@ public class Pawn extends Piece {
     }
 
     private boolean isWithinEnpassantRows() {
-        return isPieceWhite() && (piecePosition >= 24 && piecePosition <= 31)
-                || !this.isPieceWhite() && (piecePosition >= 32 && piecePosition <= 39);
+        return IS_BOT_SIDE && (piecePosition >= 24 && piecePosition <= 31)
+                || !IS_BOT_SIDE && (piecePosition >= 32 && piecePosition <= 39);
     }
 
     private boolean isEnpassantLegal(Tile[] chessBoard, int move) {
@@ -110,9 +110,9 @@ public class Pawn extends Piece {
 
                 Piece recentPiece = recentMove.getPieceMoved();
                 Piece enpassantPiece = null;
-                if ((move == 7 && isPieceWhite()) || (move == 9 && !isPieceWhite())) {
+                if ((move == 7 && IS_BOT_SIDE) || (move == 9 && !IS_BOT_SIDE)) {
                     enpassantPiece = chessBoard[piecePosition + 1].getAssignedPiece();
-                } else if ((move == 9 && isPieceWhite()) || (move == 7 && !isPieceWhite())) {
+                } else if ((move == 9 && IS_BOT_SIDE) || (move == 7 && !IS_BOT_SIDE)) {
                     enpassantPiece = chessBoard[piecePosition - 1].getAssignedPiece();
                 }
 

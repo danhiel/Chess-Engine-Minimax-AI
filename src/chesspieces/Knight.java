@@ -19,8 +19,8 @@ public class Knight extends Piece {
     private static final int[] KNIGHT_MOVE_SET = {-17, -15, -10, -6, 6, 10, 15, 17};
     private static final int PIECE_VALUE = 3;
 
-    public Knight(boolean isWhitePiece, int piecePosition) {
-        super(isWhitePiece, piecePosition);
+    public Knight(boolean isWhitePiece, boolean isBotSide, int piecePosition) {
+        super(isWhitePiece, isBotSide, piecePosition);
     }
 
     @Override

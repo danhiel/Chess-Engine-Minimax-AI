@@ -20,8 +20,8 @@ public class Rook extends Piece {
     private static final int PIECE_VALUE = 5;
     private boolean isFirstMove;
 
-    public Rook(boolean isWhitePiece, int piecePosition) {
-        super(isWhitePiece, piecePosition);
+    public Rook(boolean isWhitePiece, boolean isBotSide, int piecePosition) {
+        super(isWhitePiece, isBotSide, piecePosition);
         isFirstMove = true;
     }
 

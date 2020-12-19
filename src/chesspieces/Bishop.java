@@ -19,8 +19,8 @@ public class Bishop extends Piece {
     private static final int[] BISHOP_MOVE_SET = {-9, -7, 7, 9};
     private static final int PIECE_VALUE = 3;
 
-    public Bishop(boolean isWhitePiece, int piecePosition) {
-        super(isWhitePiece, piecePosition);
+    public Bishop(boolean isWhitePiece, boolean isBotSide, int piecePosition) {
+        super(isWhitePiece, isBotSide, piecePosition);
     }
 
     @Override

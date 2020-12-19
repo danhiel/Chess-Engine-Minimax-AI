@@ -1,7 +1,6 @@
 package chesspieces;
 
 import chessboard.Tile;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,8 +18,8 @@ public class Queen extends Piece {
     private static final int[] QUEEN_MOVE_SET = {-9, -8, -7, -1, 1, 7, 8, 9};
     private static final int PIECE_VALUE = 7;
 
-    public Queen(boolean isWhitePiece, int piecePosition) {
-        super(isWhitePiece, piecePosition);
+    public Queen(boolean isWhitePiece, boolean isBotSide, int piecePosition) {
+        super(isWhitePiece, isBotSide, piecePosition);
     }
 
     @Override
