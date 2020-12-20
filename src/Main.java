@@ -1,5 +1,4 @@
 import chessboard.DefaultGameBoard;
-import chessboard.UserInterface;
 import gamestate.MoveAlgorithm;
 import gamestate.MoveHistory;
 import players.Human;

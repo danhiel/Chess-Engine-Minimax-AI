@@ -1,5 +1,6 @@
-package chessboard;
+package userinterface;
 
+import chessboard.Tile;
 import chesspieces.Piece;
 import gamestate.MoveAlgorithm;
 import gamestate.MoveHistory;

@@ -1,7 +1,9 @@
 package userinterface;
 
 import chessboard.DefaultGameBoard;
+import chessboard.Tile;
 import gamestate.MoveHistory;
+import gamestate.MoveAlgorithm;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -73,8 +75,14 @@ public class StartUI {
         buttonWhiteSide.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 Stack<MoveHistory> moveHistory = new Stack<MoveHistory>();
                 DefaultGameBoard gameBoard = new DefaultGameBoard(moveHistory, true);
+                Tile[] chessBoard = gameBoard.getChessBoard();
+                MoveAlgorithm moveAlgorithm = new MoveAlgorithm(chessBoard, moveHistory);
+                GameUI gameUI = new GameUI(chessBoard, moveAlgorithm, moveHistory);
+
+                gameUI.createGameUI();
 
                 frame.dispose();
             }
@@ -83,8 +91,14 @@ public class StartUI {
         buttonBlackSide.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 Stack<MoveHistory> moveHistory = new Stack<MoveHistory>();
                 DefaultGameBoard gameBoard = new DefaultGameBoard(moveHistory, false);
+                Tile[] chessBoard = gameBoard.getChessBoard();
+                MoveAlgorithm moveAlgorithm = new MoveAlgorithm(chessBoard, moveHistory);
+                GameUI gameUI = new GameUI(chessBoard, moveAlgorithm, moveHistory);
+
+                gameUI.createGameUI();
                 frame.dispose();
             }
         });

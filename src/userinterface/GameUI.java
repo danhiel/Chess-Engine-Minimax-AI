@@ -1,5 +1,6 @@
-package chessboard;
+package userinterface;
 
+import chessboard.Tile;
 import gamestate.MoveAlgorithm;
 import gamestate.MoveHistory;
 
@@ -15,7 +16,7 @@ import java.util.Stack;
  * @since   1/23/2020
  */
 
-public class UserInterface {
+public class GameUI {
 
     private final Tile[] chessBoard;
     private final MoveAlgorithm moveAlgorithm;
@@ -25,7 +26,7 @@ public class UserInterface {
     private final JLayeredPane boardJLayeredPane;
     private final JFrame frame;
 
-    public UserInterface(Tile[] chessBoard, MoveAlgorithm moveAlgorithm,
+    public GameUI(Tile[] chessBoard, MoveAlgorithm moveAlgorithm,
                          Stack<MoveHistory> moveHistory) {
         this.chessBoard = chessBoard;
         this.moveAlgorithm = moveAlgorithm;
