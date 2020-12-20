@@ -11,15 +11,8 @@ import userinterface.StartUI;
 public class Main {
 
     public static void main(String[] args) {
-        //Stack<MoveHistory> moveHistory = new Stack<MoveHistory>();
-        //GameBoard gameBoard = new GameBoard(moveHistory);
-        //MoveAlgorithm moveAlgorithm = new MoveAlgorithm(gameBoard.getChessBoard(), moveHistory);
-        //Player whitePlayer = new Human(gameBoard.getChessBoard(), moveAlgorithm, moveHistory, true);
-        //Player blackPlayer = new Human(gameBoard.getChessBoard(), moveAlgorithm, moveHistory, false);
-        //UserInterface userInterface = new UserInterface(gameBoard.getChessBoard(), moveAlgorithm, moveHistory);
 
-        //userInterface.createGameUI();
-
+        // Starts the game of Chess.
         StartUI startUI = new StartUI();
         startUI.createStartUI();
     }

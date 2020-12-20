@@ -123,9 +123,9 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     }
 
     private void highlightAllMoves() {
-        chessBoard[savedPiece.getPiecePosition()].highlightTileColor();
+        chessBoard[savedPiece.getPiecePosition()].assignHighlightTileColor();
         for (int moveID : savedMoves) {
-            this.chessBoard[moveID].highlightTileColor();
+            this.chessBoard[moveID].assignHighlightTileColor();
         }
     }
 
