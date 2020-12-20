@@ -79,15 +79,16 @@ public class MoveAlgorithm {
         return pieceAttacked;
     }
 
-    private void updatePieceFirstMove(String pieceMovingType, Piece pieceMoving) {
-        if (pieceMovingType.equals("Pawn")) {
-            ((Pawn) pieceMoving).setIsFirstMove(false);
-        } else if (pieceMovingType.equals("Rook")) {
-            ((Rook) pieceMoving).setIsFirstMove(false);
-        } else if (pieceMovingType.equals("King")) {
-            ((King) pieceMoving).setIsFirstMove(false);
-        } else {
-            isFirstMove = false;
+    private void updatePieceFirstMove(String pieceMovedType, Piece pieceMoved) {
+        if (pieceMovedType.equals("Pawn")) {
+            ((Pawn) pieceMoved).setIsFirstMove(false);
+            isFirstMove = true;
+        } else if (pieceMovedType.equals("Rook")) {
+            ((Rook) pieceMoved).setIsFirstMove(false);
+            isFirstMove = true;
+        } else if (pieceMovedType.equals("King")) {
+            ((King) pieceMoved).setIsFirstMove(false);
+            isFirstMove = true;
         }
     }
 
@@ -123,7 +124,7 @@ public class MoveAlgorithm {
         }
         moveHistory.push(new MoveHistory(pieceMoved.getPiecePosition(),
                 pieceAttackedPos, pieceMoved, pieceMoved, isFirstMove));
-        isFirstMove = true;
+        isFirstMove = false;
     }
 
     private void repaintChessBoard(Piece pieceAttacked, int currentPosition, int finalPosition) {
