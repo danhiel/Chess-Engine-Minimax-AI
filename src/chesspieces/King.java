@@ -85,7 +85,8 @@ public class King extends Piece {
     private Rook getRook(Tile[] chessBoard, boolean isLeftSide) {
         int rookPosition = getRookPosition(isLeftSide);
         Piece chessPiece = chessBoard[rookPosition].getAssignedPiece();
-        if (chessPiece.getPieceType() == "Rook") {
+        if (chessPiece != null 
+            && chessPiece.getPieceType() == "Rook") {
             return (Rook) chessPiece;
         }
         return null;
