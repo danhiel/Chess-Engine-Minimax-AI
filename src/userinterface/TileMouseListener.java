@@ -21,9 +21,9 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     private final Stack<MoveHistory> moveHistory;
     private final MoveAlgorithm moveAlgorithm;
 
-    private static JLabel savedPieceImage = null;
-    private static Piece savedPiece = null;
-    private static List<Integer> savedMoves = null;
+    private JLabel savedPieceImage = null;
+    private Piece savedPiece = null;
+    private List<Integer> savedMoves = null;
 
     public TileMouseListener(Tile boardTile, Tile[] chessBoard, JLayeredPane boardJLayeredPane,
                              MoveAlgorithm moveAlgorithm, Stack<MoveHistory> moveHistory) {

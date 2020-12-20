@@ -1,11 +1,4 @@
-import chessboard.DefaultGameBoard;
-import gamestate.MoveAlgorithm;
-import gamestate.MoveHistory;
-import players.Human;
-import players.Player;
 import userinterface.StartUI;
-
-import java.util.Stack;
 
 /**
  * The program allows the user to play a game of Chess
