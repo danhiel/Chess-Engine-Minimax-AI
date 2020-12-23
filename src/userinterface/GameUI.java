@@ -54,7 +54,7 @@ public class GameUI {
         chessBoardPanel.setLayout(new GridLayout(8, 8));
         for (int i = 0; i < 64; i++) {
             Tile boardTile = chessBoard[i];
-            JPanel tileJPanel = boardTile.getTileJPanel();
+            JPanel tileJPanel = boardTile.getTileUI().getTileJPanel();
 
             chessBoardPanel.add(tileJPanel);
             setUpTileMouseListeners(boardTile, tileJPanel);

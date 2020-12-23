@@ -2,7 +2,6 @@ package chessboard;
 
 import chesspieces.*;
 import gamestate.MoveHistory;
-
 import java.util.Stack;
 
 /**

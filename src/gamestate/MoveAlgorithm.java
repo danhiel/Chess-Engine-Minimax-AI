@@ -128,10 +128,10 @@ public class MoveAlgorithm {
     }
 
     private void repaintChessBoard(Piece pieceAttacked, int currentPosition, int finalPosition) {
-        chessBoard[currentPosition].resetTilePanel();
-        chessBoard[finalPosition].resetTilePanel();
+        chessBoard[currentPosition].getTileUI().resetTilePanel();
+        chessBoard[finalPosition].getTileUI().resetTilePanel();
         if (pieceAttacked != null && isSpecialMove(pieceAttacked, finalPosition)) {
-            chessBoard[pieceAttacked.getPiecePosition()].resetTilePanel();
+            chessBoard[pieceAttacked.getPiecePosition()].getTileUI().resetTilePanel();
 
             if (pieceAttacked.getPieceType().equals("Rook")) {
                 int castlePosition;
@@ -140,7 +140,7 @@ public class MoveAlgorithm {
                 } else {
                     castlePosition = finalPosition - 2;
                 }
-                chessBoard[castlePosition].resetTilePanel();
+                chessBoard[castlePosition].getTileUI().resetTilePanel();
             }
         }
     }

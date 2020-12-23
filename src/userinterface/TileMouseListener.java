@@ -72,26 +72,26 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         if (savedPieceImage != null) {
-            Component comp = boardTile.getTileJPanel().getParent();
+            Component comp = boardTile.getTileUI().getTileJPanel().getParent();
             Component otherComp = comp.getComponentAt(comp.getParent().getMousePosition());
             int height = comp.getSize().height / 8;
             int width = comp.getSize().width / 8;
             int total = (otherComp.getLocation().y / height) * 8;
             total += otherComp.getLocation().x / width;
-            if (boardTile.getTileJPanel() == otherComp){
-                boardTile.setPieceImage(savedPieceImage);
+            if (boardTile.getTileUI().getTileJPanel() == otherComp){
+                boardTile.getTileUI().setPieceImage(savedPieceImage);
                 boardJLayeredPane.repaint();
                 savedPieceImage = null;
             } else {
                 unhighlightAllMoves();
                 if (savedMoves.contains(total)) {
-                    boardTile.setPieceImage(savedPieceImage);
+                    boardTile.getTileUI().setPieceImage(savedPieceImage);
                     boardJLayeredPane.repaint();
                     savedPieceImage = null;
                     moveAlgorithm.movePieceToSquare(savedPiece.getPiecePosition(),
                             total);
                 } else {
-                    boardTile.setPieceImage(savedPieceImage);
+                    boardTile.getTileUI().setPieceImage(savedPieceImage);
                     boardJLayeredPane.repaint();
                     savedPieceImage = null;
                 }
@@ -123,23 +123,23 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     }
 
     private void highlightAllMoves() {
-        chessBoard[savedPiece.getPiecePosition()].assignHighlightTileColor();
+        chessBoard[savedPiece.getPiecePosition()].getTileUI().assignHighlightTileColor();
         for (int moveID : savedMoves) {
-            this.chessBoard[moveID].assignHighlightTileColor();
+            this.chessBoard[moveID].getTileUI().assignHighlightTileColor();
         }
     }
 
     private void unhighlightAllMoves() {
-        chessBoard[savedPiece.getPiecePosition()].assignDefaultTileColor();
+        chessBoard[savedPiece.getPiecePosition()].getTileUI().assignDefaultTileColor();
         for (int moveID : savedMoves) {
-            this.chessBoard[moveID].assignDefaultTileColor();
+            this.chessBoard[moveID].getTileUI().assignDefaultTileColor();
         }
     }
 
     private void transferPieceImageToDragLayer() {
-        savedPieceImage = boardTile.getPieceImage();
+        savedPieceImage = boardTile.getTileUI().getPieceImage();
         boardJLayeredPane.add(savedPieceImage, JLayeredPane.DRAG_LAYER);
-        boardTile.repaintTilePanel();
+        boardTile.getTileUI().repaintTilePanel();
     }
 
     private void updatePieceImageLocation() {

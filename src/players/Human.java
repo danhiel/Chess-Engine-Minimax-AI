@@ -52,17 +52,17 @@ public class Human extends Player {
     private void highlightPiece(Piece selectedPiece) {
         highlightedPiece = selectedPiece;
         highlightedMoves = selectedPiece.getAllMoves(boardTiles);
-        boardTiles[selectedPiece.getPiecePosition()].assignHighlightTileColor();
+        boardTiles[selectedPiece.getPiecePosition()].getTileUI().assignHighlightTileColor();
         System.out.println(highlightedMoves);
         for (int moveID : highlightedMoves) {
-            this.boardTiles[moveID].assignHighlightTileColor();
+            this.boardTiles[moveID].getTileUI().assignHighlightTileColor();
         }
     }
 
     private void unhighlightPiece(Piece selectedPiece) {
-        boardTiles[highlightedPiece.getPiecePosition()].assignDefaultTileColor();
+        boardTiles[highlightedPiece.getPiecePosition()].getTileUI().assignDefaultTileColor();
         for (int movePosition : highlightedMoves) {
-            this.boardTiles[movePosition].assignDefaultTileColor();
+            this.boardTiles[movePosition].getTileUI().assignDefaultTileColor();
         }
         highlightedPiece = selectedPiece;
     }
