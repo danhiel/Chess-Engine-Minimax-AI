@@ -13,6 +13,15 @@ import java.awt.event.MouseMotionListener;
 import java.util.Stack;
 import java.util.List;
 
+/**
+ * Set up for TileMouseListener for the chessboard tiles. Enables the user to drag
+ * and drop pieces to move, use clicking actions to move a piece, or right click
+ * to undo.
+ *
+ * @author  Danhiel Vu
+ * @version 1.0
+ * @since   3/28/2021
+ */
 public class TileMouseListener implements MouseListener, MouseMotionListener {
 
     private final Tile boardTile;
@@ -21,10 +30,19 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     private final Stack<MoveHistory> moveHistory;
     private final MoveAlgorithm moveAlgorithm;
 
-    private JLabel savedPieceImage = null;
-    private Piece savedPiece = null;
-    private List<Integer> savedMoves = null;
+    private static JLabel savedPieceImage = null;
+    private static Piece savedPiece = null;
+    private static List<Integer> savedMoves = null;
 
+    /**
+     * Constructor for the TileMouseListener.
+     * 
+     * @param boardTile the given singular tile taken from the chessboard.
+     * @param chessBoard the main chessboard that tracks board-state.
+     * @param boardJLayeredPane the layered pane that will help track mouse position.
+     * @param moveAlgorithm controls piece movement in the game.
+     * @param moveHistory tracks move history.
+     */
     public TileMouseListener(Tile boardTile, Tile[] chessBoard, JLayeredPane boardJLayeredPane,
                              MoveAlgorithm moveAlgorithm, Stack<MoveHistory> moveHistory) {
         this.boardTile = boardTile;
@@ -34,51 +52,68 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
         this.boardJLayeredPane = boardJLayeredPane;
     }
 
+    /**
+     * When the mouse is pressed, highlight the chesspiece the mouse is placed on.
+     */
     @Override
     public void mousePressed(MouseEvent e) {
-        Piece pieceSelected = boardTile.getAssignedPiece();
-        if (isRespectivePlayersTurn(pieceSelected)) {
+        Piece selectedPiece = boardTile.getAssignedPiece();
+        if (isRespectivePlayersTurn(selectedPiece)) {
 
-            if (this.savedPiece == pieceSelected) {
+            // Unselects the selected piece.
+            if (savedPiece == selectedPiece) {
                 unhighlightAllMoves();
-                this.savedPiece = null;
+                savedPiece = null;
 
-            } else if (savedPiece == null) {
-                savedPiece = pieceSelected;
-                savedMoves = pieceSelected.getAllMoves(chessBoard);
+            // Selects a piece.
+            } else if (selectedPiece != null && savedPiece == null) {
+                savedPiece = selectedPiece;
+                savedMoves = selectedPiece.getAllMoves(chessBoard);
                 highlightAllMoves();
                 transferPieceImageToDragLayer();
                 updatePieceImageLocation();
 
-            } else if (isPieceSelectedAlly(pieceSelected)) {
-                unhighlightAllMoves();
-                this.savedPiece = pieceSelected;
-                this.savedMoves = pieceSelected.getAllMoves(chessBoard);
-                highlightAllMoves();
-                transferPieceImageToDragLayer();
-                updatePieceImageLocation();
-
+            // Unselects piece if move is invalid.
             } else if (savedPiece != null) {
                 unhighlightAllMoves();
-                if (savedMoves.contains(boardTile.getTileID())) {
-                    moveAlgorithm.movePieceToSquare(savedPiece.getPiecePosition(),
-                            boardTile.getTileID());
+                if (isPieceSelectedAlly(selectedPiece)) {
+                    savedPiece = selectedPiece;
+                    savedMoves = selectedPiece.getAllMoves(chessBoard);
+                    highlightAllMoves();
+                    transferPieceImageToDragLayer();
+                    updatePieceImageLocation();
+                } else {
+                    if (savedMoves.contains(boardTile.getTileID())) {
+                        moveAlgorithm.movePieceToSquare(savedPiece.getPiecePosition(),
+                                boardTile.getTileID());
+                    }
+                    savedPiece = null;
                 }
-                savedPiece = null;
             }
         }
     }
 
+    /**
+     * When the mouse is released, if the mouse did not move from the original tile
+     * it was pressed on, do nothing. Otherwise, move the chesspiece to the tile the
+     * mouse was released on if it is a legal move.
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
         if (savedPieceImage != null) {
+
+            // Get the chessBoardJPanel height and width size
             Component comp = boardTile.getTileUI().getTileJPanel().getParent();
-            Component otherComp = comp.getComponentAt(comp.getParent().getMousePosition());
             int height = comp.getSize().height / 8;
             int width = comp.getSize().width / 8;
-            int total = (otherComp.getLocation().y / height) * 8;
-            total += otherComp.getLocation().x / width;
-            if (boardTile.getTileUI().getTileJPanel() == otherComp){
+
+            // Get chessBoardJLayeredPane and use this to get the mouse position.
+            Component parentComp = comp.getComponentAt(comp.getParent().getMousePosition());
+            int total = (parentComp.getLocation().y / height) * 8;
+            total += parentComp.getLocation().x / width;
+
+
+            if (boardTile.getTileUI().getTileJPanel() == parentComp){
                 boardTile.getTileUI().setPieceImage(savedPieceImage);
                 boardJLayeredPane.repaint();
                 savedPieceImage = null;
@@ -100,6 +135,9 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
         }
     }
 
+    /**
+     * Update the piece image as you click and drag a piece.
+     */
     @Override
     public void mouseDragged(MouseEvent e) {
         if (savedPiece != null) {
@@ -107,49 +145,9 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
         }
     }
 
-    private boolean isRespectivePlayersTurn(Piece pieceSelected) {
-        int totalTurns = moveHistory.size();
-        if (savedPiece != null) {
-            return true;
-        } else if (pieceSelected != null) {
-            return (totalTurns % 2 == 0) == pieceSelected.isPieceWhite();
-        }
-        return false;
-    }
-
-    private boolean isPieceSelectedAlly(Piece pieceSelected) {
-        return pieceSelected != null
-                && this.savedPiece.isPieceWhite() == pieceSelected.isPieceWhite();
-    }
-
-    private void highlightAllMoves() {
-        chessBoard[savedPiece.getPiecePosition()].getTileUI().assignHighlightTileColor();
-        for (int moveID : savedMoves) {
-            this.chessBoard[moveID].getTileUI().assignHighlightTileColor();
-        }
-    }
-
-    private void unhighlightAllMoves() {
-        chessBoard[savedPiece.getPiecePosition()].getTileUI().assignDefaultTileColor();
-        for (int moveID : savedMoves) {
-            this.chessBoard[moveID].getTileUI().assignDefaultTileColor();
-        }
-    }
-
-    private void transferPieceImageToDragLayer() {
-        savedPieceImage = boardTile.getTileUI().getPieceImage();
-        boardJLayeredPane.add(savedPieceImage, JLayeredPane.DRAG_LAYER);
-        boardTile.getTileUI().repaintTilePanel();
-    }
-
-    private void updatePieceImageLocation() {
-        Point mousePosition = boardJLayeredPane.getMousePosition();
-        if (mousePosition != null) {
-            savedPieceImage.setLocation(mousePosition.x - (savedPieceImage.getHeight() / 2),
-                    mousePosition.y - (savedPieceImage.getWidth() / 2));
-        }
-    }
-
+    /**
+     * Undo the move if the right mouse button was clicked.
+     */
     public void mouseClicked(MouseEvent e) {
         if (SwingUtilities.isRightMouseButton(e)) {
             moveAlgorithm.undoMove();
@@ -161,4 +159,69 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     public void mouseExited(MouseEvent e) {}
 
     public void mouseMoved(MouseEvent e) {}
+
+    /**
+     * 
+     * @param selectedPiece
+     * @return
+     */
+    private boolean isRespectivePlayersTurn(Piece selectedPiece) {
+        int totalTurns = moveHistory.size();
+        if (savedPiece != null) {
+            return true;
+        } else if (selectedPiece != null) {
+            return (totalTurns % 2 == 0) == selectedPiece.isPieceWhite();
+        }
+        return false;
+    }
+
+    /**
+     * 
+     * @param selectedPiece
+     * @return
+     */
+    private boolean isPieceSelectedAlly(Piece selectedPiece) {
+        return selectedPiece != null
+                && this.savedPiece.isPieceWhite() == selectedPiece.isPieceWhite();
+    }
+
+    /**
+     * 
+     */
+    private void highlightAllMoves() {
+        chessBoard[savedPiece.getPiecePosition()].getTileUI().assignHighlightTileColor();
+        for (int moveID : savedMoves) {
+            this.chessBoard[moveID].getTileUI().assignHighlightTileColor();
+        }
+    }
+
+    /**
+     * 
+     */
+    private void unhighlightAllMoves() {
+        chessBoard[savedPiece.getPiecePosition()].getTileUI().assignDefaultTileColor();
+        for (int moveID : savedMoves) {
+            this.chessBoard[moveID].getTileUI().assignDefaultTileColor();
+        }
+    }
+
+    /**
+     * 
+     */
+    private void transferPieceImageToDragLayer() {
+        savedPieceImage = boardTile.getTileUI().getPieceImage();
+        boardJLayeredPane.add(savedPieceImage, JLayeredPane.DRAG_LAYER);
+        boardTile.getTileUI().repaintTilePanel();
+    }
+
+    /**
+     * 
+     */
+    private void updatePieceImageLocation() {
+        Point mousePosition = boardJLayeredPane.getMousePosition();
+        if (mousePosition != null) {
+            savedPieceImage.setLocation(mousePosition.x - (savedPieceImage.getHeight() / 2),
+                    mousePosition.y - (savedPieceImage.getWidth() / 2));
+        }
+    }
 }

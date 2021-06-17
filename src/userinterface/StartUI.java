@@ -17,12 +17,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Stack;
 
+/**
+ * Displays and controls the start user interface. Allows the player to choose whether
+ * to play as White or Black. Once chosen, it will then begin the game of Chess.
+ *
+ * @author  Danhiel Vu
+ * @version 1.0
+ * @since   3/28/2021
+ */
 public class StartUI {
     private final JFrame frame;
     private final JPanel mainPanel;
     private final JButton buttonWhiteSide;
     private final JButton buttonBlackSide;
 
+    /**
+     * Constructor for StartUI.
+     */
     public StartUI() {
         this.frame = new JFrame("Chess");
         this.mainPanel = new JPanel();

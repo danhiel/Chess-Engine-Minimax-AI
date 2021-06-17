@@ -5,8 +5,8 @@ import userinterface.StartUI;
  * against an Min-max AI.
  *
  * @author  Danhiel Vu
- * @version 2.0
- * @since   1/23/2020
+ * @version 1.0
+ * @since   3/28/2020
  */
 public class Main {
 
