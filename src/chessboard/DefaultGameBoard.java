@@ -21,6 +21,12 @@ public class DefaultGameBoard {
     private final Piece[] whitePiecesSet;
     private final Piece[] blackPiecesSet;
 
+    /**
+     * Constructor for DefaultGameBoard.
+     * 
+     * @param moveHistory the move history of the game.
+     * @param isPlayerWhiteSide true if player is white sided, false if not.
+     */
     public DefaultGameBoard(final Stack<MoveHistory> moveHistory,
                             boolean isPlayerWhiteSide) {
         this.moveHistory = moveHistory;
@@ -31,18 +37,38 @@ public class DefaultGameBoard {
         blackPiecesSet = saveChessPieces(48);
     }
 
+    /**
+     * Returns a tileUI of size 64 that represents the game's chessboard.
+     * 
+     * @return main tile chess board.
+     */
     public TileUI[] getChessBoard() {
         return mainChessBoard;
     }
     
+    /**
+     * Returns all of the white chess pieces.
+     * 
+     * @return Piece[] representing all of the white chess pieces.
+     */
     public Piece[] getWhitePieces() {
         return whitePiecesSet;
     }
     
+    /**
+     * Returns all of the black chess pieces.
+     * 
+     * @return Piece[] representing all of the black chess pieces.
+     */
     public Piece[] getBlackPieces() {
         return blackPiecesSet;
     }
 
+    /**
+     * Sets up the TileUI[] board representing our (main) chessboard.
+     * 
+     * @return main tile chessboard.
+     */
     private TileUI[] setUpMainBoard() {
         TileUI[] chessBoard = new TileUI[64];
         for (int i = 0; i < chessBoard.length; i++) {
@@ -51,6 +77,12 @@ public class DefaultGameBoard {
         return chessBoard;
     }
 
+    /**
+     * Saves the chess pieces to an array.  
+     * 
+     * @param index the starting index of a chessboard to iterate through to index + 16.
+     * @return Piece[] representing a set of chess pieces.
+     */
     private Piece[] saveChessPieces(int index) {
         Piece[] chessPieces = new Piece[16];
         for (int i = index; i < index + 16; i++) {
@@ -59,6 +91,12 @@ public class DefaultGameBoard {
         return chessPieces;
     }
 
+    /**
+     * Sets up the main board for the pieces standard starting chess positions.
+     * 
+     * @param isPlayerWhiteSide true if the player is white side.
+     * @return Piece[] representing the starting positions for each piece on chessboard.
+     */
     private Piece[] setUpStandardBoard(boolean isPlayerWhiteSide) {
         Piece[] standardBoard = new Piece[64];
         boolean startBotSide = true;
