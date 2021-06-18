@@ -25,6 +25,12 @@ public class TileUI extends Tile {
     private final JPanel tilePanel;
     private JLabel pieceImage;
     
+    /**
+     * Constructor for TileUI
+     * 
+     * @param tileID the tile ID of the chessboard.
+     * @param assignedPiece the assigned chesspiece to the tile.
+     */
     public TileUI(int tileID, Piece assignedPiece) {
         super(tileID, assignedPiece);
 

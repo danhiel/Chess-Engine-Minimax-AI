@@ -14,6 +14,12 @@ public class Tile {
     protected final int tileID;
     protected Piece assignedPiece;
     
+    /**
+     * Constructor for Tile.
+     * 
+     * @param tileID the tile ID of the chessboard.
+     * @param assignedPiece the assigned chesspiece to the tile.
+     */
     public Tile(int tileID, Piece assignedPiece) {
         this.tileID = tileID;
         this.assignedPiece = assignedPiece;
