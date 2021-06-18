@@ -161,9 +161,11 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     public void mouseMoved(MouseEvent e) {}
 
     /**
+     * Returns true if the selected piece is the players turn.
+     * Otherwise, return false.
      * 
-     * @param selectedPiece
-     * @return
+     * @param selectedPiece the selected piece.
+     * @return true if its the players turn, false if not.
      */
     private boolean isRespectivePlayersTurn(Piece selectedPiece) {
         int totalTurns = moveHistory.size();
@@ -176,9 +178,10 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     }
 
     /**
+     * If the piece selected is an ally, then return true. Otherwise return false.
      * 
-     * @param selectedPiece
-     * @return
+     * @param selectedPiece the selected piece.
+     * @return true if selected piece is an ally, false otherwise.
      */
     private boolean isPieceSelectedAlly(Piece selectedPiece) {
         return selectedPiece != null
@@ -186,7 +189,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     }
 
     /**
-     * 
+     * Highlights all the valid moves of the selected piece.
      */
     private void highlightAllMoves() {
         chessBoard[savedPiece.getPiecePosition()].getTileUI().assignHighlightTileColor();
@@ -196,7 +199,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     }
 
     /**
-     * 
+     * Unhighlights all valid moves.
      */
     private void unhighlightAllMoves() {
         chessBoard[savedPiece.getPiecePosition()].getTileUI().assignDefaultTileColor();
@@ -206,7 +209,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     }
 
     /**
-     * 
+     * Transfers the piece image to the drag JLayer.
      */
     private void transferPieceImageToDragLayer() {
         savedPieceImage = boardTile.getTileUI().getPieceImage();
@@ -215,7 +218,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     }
 
     /**
-     * 
+     * Updates the piece image location.
      */
     private void updatePieceImageLocation() {
         Point mousePosition = boardJLayeredPane.getMousePosition();
