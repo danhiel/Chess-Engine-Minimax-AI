@@ -1,7 +1,6 @@
 package chessboard;
 
 import chesspieces.Piece;
-import userinterface.TileUI;
 
 /**
  * Tracks and updates information of a single tile.
@@ -12,14 +11,12 @@ import userinterface.TileUI;
  */
 public class Tile {
 
-    private final int tileID;
-    private final TileUI tileUI;
-    private Piece assignedPiece;
+    protected final int tileID;
+    protected Piece assignedPiece;
     
     public Tile(int tileID, Piece assignedPiece) {
         this.tileID = tileID;
         this.assignedPiece = assignedPiece;
-        tileUI = new TileUI(tileID, assignedPiece);
     }
 
     /**
@@ -28,14 +25,6 @@ public class Tile {
      */
     public int getTileID() {
         return tileID;
-    }
-
-    /**
-     * Returns the tile user interface class of this tile.
-     * @return tileUI
-     */
-    public TileUI getTileUI() {
-        return tileUI;
     }
 
     /**
@@ -51,7 +40,6 @@ public class Tile {
      * @param assignedPiece Piece chess piece.
      */
     public void setAssignedPiece(Piece assignedPiece) {
-        tileUI.setAssignedPiece(assignedPiece);
         this.assignedPiece = assignedPiece;
     }
 }

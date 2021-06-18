@@ -1,7 +1,7 @@
 package userinterface;
 
 import chessboard.DefaultGameBoard;
-import chessboard.Tile;
+import chessboard.TileUI;
 import gamestate.MoveHistory;
 import gamestate.MoveAlgorithm;
 
@@ -89,7 +89,7 @@ public class StartUI {
 
                 Stack<MoveHistory> moveHistory = new Stack<MoveHistory>();
                 DefaultGameBoard gameBoard = new DefaultGameBoard(moveHistory, true);
-                Tile[] chessBoard = gameBoard.getChessBoard();
+                TileUI[] chessBoard = gameBoard.getChessBoard();
                 MoveAlgorithm moveAlgorithm = new MoveAlgorithm(chessBoard, moveHistory);
                 GameUI gameUI = new GameUI(chessBoard, moveAlgorithm, moveHistory);
 
@@ -105,7 +105,7 @@ public class StartUI {
                 
                 Stack<MoveHistory> moveHistory = new Stack<MoveHistory>();
                 DefaultGameBoard gameBoard = new DefaultGameBoard(moveHistory, false);
-                Tile[] chessBoard = gameBoard.getChessBoard();
+                TileUI[] chessBoard = gameBoard.getChessBoard();
                 MoveAlgorithm moveAlgorithm = new MoveAlgorithm(chessBoard, moveHistory);
                 GameUI gameUI = new GameUI(chessBoard, moveAlgorithm, moveHistory);
 

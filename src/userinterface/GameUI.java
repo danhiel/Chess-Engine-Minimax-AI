@@ -1,6 +1,6 @@
 package userinterface;
 
-import chessboard.Tile;
+import chessboard.TileUI;
 import gamestate.MoveAlgorithm;
 import gamestate.MoveHistory;
 
@@ -18,7 +18,7 @@ import java.util.Stack;
  */
 public class GameUI {
 
-    private final Tile[] chessBoard;
+    private final TileUI[] chessBoard;
     private final MoveAlgorithm moveAlgorithm;
     private final Stack<MoveHistory> moveHistory;
 
@@ -33,7 +33,7 @@ public class GameUI {
      * @param moveAlgorithm controls piece movement in the game. 
      * @param moveHistory tracks move history.
      */
-    public GameUI(Tile[] chessBoard, MoveAlgorithm moveAlgorithm,
+    public GameUI(TileUI[] chessBoard, MoveAlgorithm moveAlgorithm,
                          Stack<MoveHistory> moveHistory) {
         this.chessBoard = chessBoard;
         this.moveAlgorithm = moveAlgorithm;
@@ -59,8 +59,8 @@ public class GameUI {
     private void setUpChessBoardPanel() {
         chessBoardPanel.setLayout(new GridLayout(8, 8));
         for (int i = 0; i < 64; i++) {
-            Tile boardTile = chessBoard[i];
-            JPanel tileJPanel = boardTile.getTileUI().getTileJPanel();
+            TileUI boardTile = chessBoard[i];
+            JPanel tileJPanel = boardTile.getTileJPanel();
 
             chessBoardPanel.add(tileJPanel);
             setUpTileMouseListeners(boardTile, tileJPanel);
@@ -82,7 +82,7 @@ public class GameUI {
      * @param boardTile a singular tile taken from the 64 tiles on the main chessboard.
      * @param tileJPanel the JPanel of the boardTile.
      */
-    private void setUpTileMouseListeners(Tile boardTile, JPanel tileJPanel) {
+    private void setUpTileMouseListeners(TileUI boardTile, JPanel tileJPanel) {
         TileMouseListener tileMouseListener = new TileMouseListener(boardTile,
                 chessBoard, boardJLayeredPane, moveAlgorithm, moveHistory);
         tileJPanel.addMouseMotionListener(tileMouseListener);

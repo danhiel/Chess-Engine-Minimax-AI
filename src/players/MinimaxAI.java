@@ -1,13 +1,13 @@
 package players;
 
-import chessboard.Tile;
+import chessboard.TileUI;
 import gamestate.MoveAlgorithm;
 import gamestate.MoveHistory;
 import java.util.Stack;
 
 public class MinimaxAI extends Player {
 
-    public MinimaxAI(Tile[] boardTiles, MoveAlgorithm moveAlgorithm,
+    public MinimaxAI(TileUI[] boardTiles, MoveAlgorithm moveAlgorithm,
                      Stack<MoveHistory> moveHistory, boolean isWhitePlayer) {
         super(boardTiles, moveAlgorithm, moveHistory, isWhitePlayer);
     }

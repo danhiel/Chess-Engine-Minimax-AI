@@ -16,7 +16,7 @@ public class DefaultGameBoard {
 
     private final Stack<MoveHistory> moveHistory;
     private final Piece[] standardDefaultBoard;
-    private final Tile[] mainChessBoard;
+    private final TileUI[] mainChessBoard;
     
     private final Piece[] whitePiecesSet;
     private final Piece[] blackPiecesSet;
@@ -31,7 +31,7 @@ public class DefaultGameBoard {
         blackPiecesSet = saveChessPieces(48);
     }
 
-    public Tile[] getChessBoard() {
+    public TileUI[] getChessBoard() {
         return mainChessBoard;
     }
     
@@ -43,10 +43,10 @@ public class DefaultGameBoard {
         return blackPiecesSet;
     }
 
-    private Tile[] setUpMainBoard() {
-        Tile[] chessBoard = new Tile[64];
+    private TileUI[] setUpMainBoard() {
+        TileUI[] chessBoard = new TileUI[64];
         for (int i = 0; i < chessBoard.length; i++) {
-            chessBoard[i] = new Tile(i, standardDefaultBoard[i]);
+            chessBoard[i] = new TileUI(i, standardDefaultBoard[i]);
         }
         return chessBoard;
     }

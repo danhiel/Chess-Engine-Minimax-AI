@@ -1,6 +1,6 @@
 package players;
 
-import chessboard.Tile;
+import chessboard.TileUI;
 import chesspieces.Piece;
 import gamestate.MoveAlgorithm;
 import gamestate.MoveHistory;
@@ -13,7 +13,7 @@ public class Human extends Player {
     private Piece highlightedPiece;
     private List<Integer> highlightedMoves;
 
-    public Human(Tile[] boardTiles, MoveAlgorithm moveAlgorithm,
+    public Human(TileUI[] boardTiles, MoveAlgorithm moveAlgorithm,
                  Stack<MoveHistory> moveHistory, boolean isPlayerWhite) {
         super(boardTiles, moveAlgorithm, moveHistory, isPlayerWhite);
         highlightedPiece = null;
@@ -52,17 +52,17 @@ public class Human extends Player {
     private void highlightPiece(Piece selectedPiece) {
         highlightedPiece = selectedPiece;
         highlightedMoves = selectedPiece.getAllMoves(boardTiles);
-        boardTiles[selectedPiece.getPiecePosition()].getTileUI().assignHighlightTileColor();
+        boardTiles[selectedPiece.getPiecePosition()].assignHighlightTileColor();
         System.out.println(highlightedMoves);
         for (int moveID : highlightedMoves) {
-            this.boardTiles[moveID].getTileUI().assignHighlightTileColor();
+            this.boardTiles[moveID].assignHighlightTileColor();
         }
     }
 
     private void unhighlightPiece(Piece selectedPiece) {
-        boardTiles[highlightedPiece.getPiecePosition()].getTileUI().assignDefaultTileColor();
+        boardTiles[highlightedPiece.getPiecePosition()].assignDefaultTileColor();
         for (int movePosition : highlightedMoves) {
-            this.boardTiles[movePosition].getTileUI().assignDefaultTileColor();
+            this.boardTiles[movePosition].assignDefaultTileColor();
         }
         highlightedPiece = selectedPiece;
     }

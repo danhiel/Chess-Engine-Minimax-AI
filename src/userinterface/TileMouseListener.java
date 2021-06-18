@@ -1,6 +1,6 @@
 package userinterface;
 
-import chessboard.Tile;
+import chessboard.TileUI;
 import chesspieces.Piece;
 import gamestate.MoveAlgorithm;
 import gamestate.MoveHistory;
@@ -24,8 +24,8 @@ import java.util.List;
  */
 public class TileMouseListener implements MouseListener, MouseMotionListener {
 
-    private final Tile boardTile;
-    private final Tile[] chessBoard;
+    private final TileUI boardTile;
+    private final TileUI[] chessBoard;
     private final JLayeredPane boardJLayeredPane;
     private final Stack<MoveHistory> moveHistory;
     private final MoveAlgorithm moveAlgorithm;
@@ -43,7 +43,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
      * @param moveAlgorithm controls piece movement in the game.
      * @param moveHistory tracks move history.
      */
-    public TileMouseListener(Tile boardTile, Tile[] chessBoard, JLayeredPane boardJLayeredPane,
+    public TileMouseListener(TileUI boardTile, TileUI[] chessBoard, JLayeredPane boardJLayeredPane,
                              MoveAlgorithm moveAlgorithm, Stack<MoveHistory> moveHistory) {
         this.boardTile = boardTile;
         this.chessBoard = chessBoard;
@@ -103,7 +103,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
         if (savedPieceImage != null) {
 
             // Get the chessBoardJPanel height and width size
-            Component comp = boardTile.getTileUI().getTileJPanel().getParent();
+            Component comp = boardTile.getTileJPanel().getParent();
             int height = comp.getSize().height / 8;
             int width = comp.getSize().width / 8;
 
@@ -113,20 +113,20 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
             total += parentComp.getLocation().x / width;
 
 
-            if (boardTile.getTileUI().getTileJPanel() == parentComp){
-                boardTile.getTileUI().setPieceImage(savedPieceImage);
+            if (boardTile.getTileJPanel() == parentComp){
+                boardTile.setPieceImage(savedPieceImage);
                 boardJLayeredPane.repaint();
                 savedPieceImage = null;
             } else {
                 unhighlightAllMoves();
                 if (savedMoves.contains(total)) {
-                    boardTile.getTileUI().setPieceImage(savedPieceImage);
+                    boardTile.setPieceImage(savedPieceImage);
                     boardJLayeredPane.repaint();
                     savedPieceImage = null;
                     moveAlgorithm.movePieceToSquare(savedPiece.getPiecePosition(),
                             total);
                 } else {
-                    boardTile.getTileUI().setPieceImage(savedPieceImage);
+                    boardTile.setPieceImage(savedPieceImage);
                     boardJLayeredPane.repaint();
                     savedPieceImage = null;
                 }
@@ -192,9 +192,9 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
      * Highlights all the valid moves of the selected piece.
      */
     private void highlightAllMoves() {
-        chessBoard[savedPiece.getPiecePosition()].getTileUI().assignHighlightTileColor();
+        chessBoard[savedPiece.getPiecePosition()].assignHighlightTileColor();
         for (int moveID : savedMoves) {
-            this.chessBoard[moveID].getTileUI().assignHighlightTileColor();
+            this.chessBoard[moveID].assignHighlightTileColor();
         }
     }
 
@@ -202,9 +202,9 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
      * Unhighlights all valid moves.
      */
     private void unhighlightAllMoves() {
-        chessBoard[savedPiece.getPiecePosition()].getTileUI().assignDefaultTileColor();
+        chessBoard[savedPiece.getPiecePosition()].assignDefaultTileColor();
         for (int moveID : savedMoves) {
-            this.chessBoard[moveID].getTileUI().assignDefaultTileColor();
+            this.chessBoard[moveID].assignDefaultTileColor();
         }
     }
 
@@ -212,9 +212,9 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
      * Transfers the piece image to the drag JLayer.
      */
     private void transferPieceImageToDragLayer() {
-        savedPieceImage = boardTile.getTileUI().getPieceImage();
+        savedPieceImage = boardTile.getPieceImage();
         boardJLayeredPane.add(savedPieceImage, JLayeredPane.DRAG_LAYER);
-        boardTile.getTileUI().repaintTilePanel();
+        boardTile.repaintTilePanel();
     }
 
     /**

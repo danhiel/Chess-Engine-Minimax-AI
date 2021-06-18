@@ -1,6 +1,6 @@
 package gamestate;
 
-import chessboard.Tile;
+import chessboard.TileUI;
 import chesspieces.*;
 
 import java.util.List;
@@ -8,12 +8,12 @@ import java.util.Stack;
 
 public class MoveAlgorithm {
 
-    private final Tile[] chessBoard;
+    private final TileUI[] chessBoard;
     private final Stack<MoveHistory> moveHistory;
     private boolean isFirstMove;
     private Piece pieceAttacked;
     
-    public MoveAlgorithm(Tile[] chessBoard, Stack<MoveHistory> moveHistory) {
+    public MoveAlgorithm(TileUI[] chessBoard, Stack<MoveHistory> moveHistory) {
         this.chessBoard = chessBoard;
         this.moveHistory = moveHistory;
         isFirstMove = true;
@@ -128,10 +128,10 @@ public class MoveAlgorithm {
     }
 
     private void repaintChessBoard(Piece pieceAttacked, int currentPosition, int finalPosition) {
-        chessBoard[currentPosition].getTileUI().resetTilePanel();
-        chessBoard[finalPosition].getTileUI().resetTilePanel();
+        chessBoard[currentPosition].resetTilePanel();
+        chessBoard[finalPosition].resetTilePanel();
         if (pieceAttacked != null && isSpecialMove(pieceAttacked, finalPosition)) {
-            chessBoard[pieceAttacked.getPiecePosition()].getTileUI().resetTilePanel();
+            chessBoard[pieceAttacked.getPiecePosition()].resetTilePanel();
 
             if (pieceAttacked.getPieceType().equals("Rook")) {
                 int castlePosition;
@@ -140,7 +140,7 @@ public class MoveAlgorithm {
                 } else {
                     castlePosition = finalPosition - 2;
                 }
-                chessBoard[castlePosition].getTileUI().resetTilePanel();
+                chessBoard[castlePosition].resetTilePanel();
             }
         }
     }

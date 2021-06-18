@@ -1,4 +1,4 @@
-package userinterface;
+package chessboard;
 
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -14,7 +14,7 @@ import chesspieces.Piece;
  * @version 2.0
  * @since   1/23/2020
  */
-public class TileUI {
+public class TileUI extends Tile {
 
     // Default colors of tiles
     private static final Color DARK_COLOR = new Color(204, 255, 255);
@@ -22,15 +22,11 @@ public class TileUI {
     private static final Color HIGHLIGHT_DARK = new Color(176, 181, 176);
     private static final Color HIGHLIGHT_LIGHT = new Color(120, 128, 120);
 
-    private final int tileID;
-    private Piece assignedPiece;
-
     private final JPanel tilePanel;
     private JLabel pieceImage;
     
     public TileUI(int tileID, Piece assignedPiece) {
-        this.tileID = tileID;
-        this.assignedPiece = assignedPiece;
+        super(tileID, assignedPiece);
 
         tilePanel = new JPanel();
         pieceImage = new JLabel();
