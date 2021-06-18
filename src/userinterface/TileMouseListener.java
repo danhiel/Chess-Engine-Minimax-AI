@@ -185,7 +185,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
      */
     private boolean isPieceSelectedAlly(Piece selectedPiece) {
         return selectedPiece != null
-                && this.savedPiece.isPieceWhite() == selectedPiece.isPieceWhite();
+                && savedPiece.isPieceWhite() == selectedPiece.isPieceWhite();
     }
 
     /**
