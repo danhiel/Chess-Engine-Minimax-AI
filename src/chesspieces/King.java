@@ -93,17 +93,11 @@ public class King extends Piece {
     }
 
     private int getRookPosition(boolean isLeftSide) {
-        int rookPosition = -1;
-        if (IS_BOT_SIDE && isLeftSide) {
-            rookPosition = 56;
-        } else if (IS_BOT_SIDE && !isLeftSide) {
-            rookPosition = 63;
-        } else if (IS_BOT_SIDE && isLeftSide) {
-            rookPosition = 0;
+        if (isLeftSide) {
+            return this.piecePosition - 4;
         } else {
-            rookPosition = 7;
+            return this.piecePosition + 3;
         }
-        return rookPosition;
     }
 
     private boolean checkIfLeftCastlingLegal(Tile[] chessBoard, Rook leftRook) {
