@@ -43,8 +43,11 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
      * @param moveAlgorithm controls piece movement in the game.
      * @param moveHistory tracks move history.
      */
-    public TileMouseListener(TileUI chessTile, TileUI[] chessBoard, JLayeredPane boardJLayeredPane,
-                             MoveAlgorithm moveAlgorithm, Stack<MoveHistory> moveHistory) {
+    public TileMouseListener(TileUI chessTile,
+                             TileUI[] chessBoard,
+                             JLayeredPane boardJLayeredPane,
+                             MoveAlgorithm moveAlgorithm,
+                             Stack<MoveHistory> moveHistory) {
         this.chessTile = chessTile;
         this.chessBoard = chessBoard;
         this.moveAlgorithm = moveAlgorithm;
