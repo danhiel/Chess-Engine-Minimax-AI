@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.Stack;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Set up for TileMouseListener for the chessboard tiles. Enables the user to drag
@@ -32,7 +32,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
 
     private static JLabel savedPieceImage = null;
     private static Piece savedPiece = null;
-    private static List<Integer> savedMoves = null;
+    private static Set<Integer> savedMoves = null;
 
     /**
      * Constructor for the TileMouseListener.

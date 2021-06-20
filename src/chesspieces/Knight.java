@@ -3,8 +3,8 @@ package chesspieces;
 import chessboard.Tile;
 import gamestate.MoveAlgorithm;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The class tracks basic information such as team color,
@@ -36,8 +36,13 @@ public class Knight extends Piece {
     }
 
     @Override
-    public List<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
-        List<Integer> allMoves = new ArrayList<Integer>();
+    public Set<Integer> getAllLegalMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
+        return getAllMoves(chessBoard, moveAlg);
+    }
+
+    @Override
+    public Set<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
+        Set<Integer> allMoves = new HashSet<Integer>();
 
         for (int move : KNIGHT_MOVE_SET) {
             int finalPosition = piecePosition + move;

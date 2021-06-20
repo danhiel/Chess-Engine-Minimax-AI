@@ -5,13 +5,13 @@ import chesspieces.Piece;
 import gamestate.MoveAlgorithm;
 import gamestate.MoveHistory;
 
-import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 public class Human extends Player {
 
     private Piece highlightedPiece;
-    private List<Integer> highlightedMoves;
+    private Set<Integer> highlightedMoves;
 
     public Human(TileUI[] boardTiles, MoveAlgorithm moveAlgorithm,
                  Stack<MoveHistory> moveHistory, boolean isPlayerWhite) {

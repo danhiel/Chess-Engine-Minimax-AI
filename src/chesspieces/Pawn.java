@@ -4,8 +4,8 @@ import chessboard.Tile;
 import gamestate.MoveAlgorithm;
 import gamestate.MoveHistory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Stack;
 
 /**
@@ -51,8 +51,13 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public List<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
-        List<Integer> allMoves = new ArrayList<Integer>();
+    public Set<Integer> getAllLegalMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
+        return getAllMoves(chessBoard, moveAlg);
+    }
+
+    @Override
+    public Set<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
+        Set<Integer> allMoves = new HashSet<Integer>();
 
         for (int move : PAWN_MOVE_SET) {
             int finalPosition = piecePosition + getRespectiveMove(move);
@@ -72,7 +77,7 @@ public class Pawn extends Piece {
         return move;
     }
 
-    private void addNormalMoves(List<Integer> allMoves, Tile[] chessBoard,
+    private void addNormalMoves(Set<Integer> allMoves, Tile[] chessBoard,
                                       int finalPosition, int move) {
         if (chessBoard[finalPosition].getAssignedPiece() == null) {
             if (move == 8) {
@@ -85,7 +90,7 @@ public class Pawn extends Piece {
         }
     }
 
-    private void addAttackMoves(List<Integer> allMoves, Tile[] chessBoard,
+    private void addAttackMoves(Set<Integer> allMoves, Tile[] chessBoard,
                                       int finalPosition, int move) {
         if ((move == 7 || move == 9)) {
             if (isEnemy(chessBoard[finalPosition])) {

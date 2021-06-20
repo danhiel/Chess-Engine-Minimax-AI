@@ -3,7 +3,7 @@ package chesspieces;
 import chessboard.Tile;
 import gamestate.MoveAlgorithm;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * The class tracks basic information such as team color,
@@ -45,7 +45,12 @@ public class Rook extends Piece {
     }
 
     @Override
-    public List<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
+    public Set<Integer> getAllLegalMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
+        return getAllMoves(chessBoard, moveAlg);
+    }
+
+    @Override
+    public Set<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
         return getRepeatedMoves(chessBoard, ROOK_MOVE_SET);
     }
 }

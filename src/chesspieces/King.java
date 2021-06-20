@@ -3,8 +3,8 @@ package chesspieces;
 import chessboard.Tile;
 import gamestate.MoveAlgorithm;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The class tracks basic information such as team color,
@@ -46,8 +46,13 @@ public class King extends Piece {
     }
 
     @Override
-    public List<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
-        List<Integer> allMoves = new ArrayList<Integer>();
+    public Set<Integer> getAllLegalMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
+        return getAllMoves(chessBoard, moveAlg);
+    }
+
+    @Override
+    public Set<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
+        Set<Integer> allMoves = new HashSet<Integer>();
 
         for (int move : KING_MOVE_SET) {
             int finalPosition = piecePosition + move;
@@ -58,7 +63,9 @@ public class King extends Piece {
         return allMoves;
     }
 
-    private void addNormalMoves(List<Integer> allMoves, Tile[] chessBoard, int finalPosition) {
+    private void addNormalMoves(Set<Integer> allMoves,
+                                Tile[] chessBoard,
+                                int finalPosition) {
         if (isWithinLegalColumns(finalPosition, piecePosition)
                 && (chessBoard[finalPosition].getAssignedPiece() == null
                     || isEnemy(chessBoard[finalPosition]))) {
@@ -66,7 +73,7 @@ public class King extends Piece {
         }
     }
 
-    private void addCastlingMoves(List<Integer> allMoves, Tile[] chessBoard) {
+    private void addCastlingMoves(Set<Integer> allMoves, Tile[] chessBoard) {
         if (isFirstMove) {
             Rook leftRook = getRook(chessBoard, true);
             Rook rightRook = getRook(chessBoard, false);

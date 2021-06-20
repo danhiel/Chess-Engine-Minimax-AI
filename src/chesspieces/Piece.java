@@ -3,8 +3,9 @@ package chesspieces;
 import chessboard.Tile;
 import gamestate.MoveAlgorithm;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The class provides basic chess piece functionalities.
@@ -41,7 +42,13 @@ public abstract class Piece {
 
     public abstract int getPieceValue();
 
-    public abstract List<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg);
+    public abstract Set<Integer> getAllLegalMoves(Tile[] chessBoard, MoveAlgorithm moveAlg);
+
+    public abstract Set<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg);
+
+    protected Set<Integer> getPrunedMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
+        
+    }
 
     protected boolean isEnemy(Tile tile) {
         Piece assignedPiece = tile.getAssignedPiece();
@@ -65,8 +72,8 @@ public abstract class Piece {
         return false;
     }
 
-    protected List<Integer> getRepeatedMoves(Tile[] chessBoard, int[] moveSet) {
-        List<Integer> allRepeatedMoves = new ArrayList<Integer>();
+    protected Set<Integer> getRepeatedMoves(Tile[] chessBoard, int[] moveSet) {
+        Set<Integer> allRepeatedMoves = new HashSet<Integer>();
 
         for (int move : moveSet) {
             int finalPosition = this.piecePosition + move;
