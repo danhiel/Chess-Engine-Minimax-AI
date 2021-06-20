@@ -8,23 +8,21 @@ import java.util.Stack;
 
 public class MoveAlgorithm {
 
-    private final TileUI[] chessBoard;
     private final Stack<MoveHistory> moveHistory;
     private boolean isFirstMove;
     private Piece pieceAttacked;
     
-    public MoveAlgorithm(TileUI[] chessBoard, Stack<MoveHistory> moveHistory) {
-        this.chessBoard = chessBoard;
+    public MoveAlgorithm(Stack<MoveHistory> moveHistory) {
         this.moveHistory = moveHistory;
         isFirstMove = true;
         pieceAttacked = null;
     }
 
-    public void undoMove() {
-        simulateUndoMove();
+    public void undoMove(TileUI[] chessBoard) {
+        simulateUndoMove(chessBoard);
     }
 
-    public void simulateUndoMove() {
+    public void simulateUndoMove(TileUI[] chessBoard) {
         MoveHistory recentMove = moveHistory.pop();
         Piece pieceMoved = recentMove.getPieceMoved();
         Piece pieceAttacked = recentMove.getPieceAttacked();
@@ -42,24 +40,30 @@ public class MoveAlgorithm {
         chessBoard[fromPositionID].setAssignedPiece(pieceMoved);
     }
 
-    public void movePieceToSquare(int currentPosition, int finalPosition) {
-        simulateMovePieceToSquare(currentPosition, finalPosition);
-        repaintChessBoard(pieceAttacked, currentPosition, finalPosition);
+    public void movePieceToSquare(TileUI[] chessBoard,
+                                  int currentPosition,
+                                  int finalPosition) {
+        simulateMovePieceToSquare(chessBoard, currentPosition, finalPosition);
+        repaintChessBoard(chessBoard, pieceAttacked, currentPosition, finalPosition);
     }
 
-    public void simulateMovePieceToSquare(int currentPosition, int finalPosition) {
+    public void simulateMovePieceToSquare(TileUI[] chessBoard,
+                                          int currentPosition,
+                                          int finalPosition) {
         Piece pieceMoved = chessBoard[currentPosition].getAssignedPiece();
         String pieceMovedType = pieceMoved.getPieceType();
-        pieceAttacked = calculatePieceAttacked(currentPosition,
-                finalPosition, pieceMovedType);
+        pieceAttacked = calculatePieceAttacked(chessBoard, currentPosition,
+                                               finalPosition, pieceMovedType);
 
         saveMoveToHistory(pieceMoved, pieceAttacked);
         updatePieceFirstMove(pieceMovedType, pieceMoved);
-        updatePiecePositions(pieceMoved, pieceAttacked, currentPosition, finalPosition);
+        updatePiecePositions(chessBoard, pieceMoved,
+                             pieceAttacked, currentPosition,
+                             finalPosition);
     }
 
-    private Piece calculatePieceAttacked(int currentPosition, int finalPosition,
-                                         String pieceMovedType) {
+    private Piece calculatePieceAttacked(TileUI[] chessBoard, int currentPosition,
+                                         int finalPosition, String pieceMovedType) {
         Piece pieceAttacked = chessBoard[finalPosition].getAssignedPiece();
         if (pieceMovedType.equals("Pawn")
                 && currentPosition % 8 != finalPosition % 8
@@ -92,8 +96,9 @@ public class MoveAlgorithm {
         }
     }
 
-    private void updatePiecePositions(Piece pieceMoved, Piece pieceAttacked,
-                                      int currentPosition, int finalPosition) {
+    private void updatePiecePositions(TileUI[] chessBoard, Piece pieceMoved,
+                                      Piece pieceAttacked, int currentPosition,
+                                      int finalPosition) {
         if (pieceAttacked != null && isSpecialMove(pieceAttacked, finalPosition)) {
             chessBoard[pieceAttacked.getPiecePosition()].setAssignedPiece(null);
 
@@ -127,7 +132,8 @@ public class MoveAlgorithm {
         isFirstMove = false;
     }
 
-    private void repaintChessBoard(Piece pieceAttacked, int currentPosition, int finalPosition) {
+    private void repaintChessBoard(TileUI[] chessBoard, Piece pieceAttacked,
+                                   int currentPosition, int finalPosition) {
         chessBoard[currentPosition].resetTilePanel();
         chessBoard[finalPosition].resetTilePanel();
         if (pieceAttacked != null && isSpecialMove(pieceAttacked, finalPosition)) {

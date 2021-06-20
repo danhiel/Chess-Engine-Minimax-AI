@@ -36,7 +36,7 @@ public class Human extends Player {
         } else if (highlightedPiece != null) {
             unhighlightPiece(null);
             if (highlightedMoves.contains(tileID)) {
-                this.moveAlgorithm.movePieceToSquare(tileID,
+                this.moveAlgorithm.movePieceToSquare(boardTiles, tileID,
                         highlightedPiece.getPiecePosition());
             }
         }

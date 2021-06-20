@@ -86,37 +86,36 @@ public class StartUI {
         buttonWhiteSide.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                Stack<MoveHistory> moveHistory = new Stack<MoveHistory>();
-                DefaultGameBoard gameBoard = new DefaultGameBoard(moveHistory, true);
-                TileUI[] chessBoard = gameBoard.getChessBoard();
-                MoveAlgorithm moveAlgorithm = new MoveAlgorithm(chessBoard, moveHistory);
-                GameUI gameUI = new GameUI(chessBoard, moveAlgorithm, moveHistory);
-
-                gameUI.createGameUI();
-
-                frame.dispose();
+                startChessGame(true);
             }
         });
 
         buttonBlackSide.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
-                Stack<MoveHistory> moveHistory = new Stack<MoveHistory>();
-                DefaultGameBoard gameBoard = new DefaultGameBoard(moveHistory, false);
-                TileUI[] chessBoard = gameBoard.getChessBoard();
-                MoveAlgorithm moveAlgorithm = new MoveAlgorithm(chessBoard, moveHistory);
-                GameUI gameUI = new GameUI(chessBoard, moveAlgorithm, moveHistory);
-
-                gameUI.createGameUI();
-                frame.dispose();
+                startChessGame(false);
             }
         });
 
         // Add buttons to main panel
         mainPanel.add(buttonWhiteSide);
         mainPanel.add(buttonBlackSide);
+    }
+
+    /**
+     * Starts the main game of chess.
+     * 
+     * @param isWhiteSide true if player is white, false otherwise.
+     */
+    private void startChessGame(boolean isWhiteSide) {
+        Stack<MoveHistory> moveHistory = new Stack<MoveHistory>();
+        DefaultGameBoard gameBoard = new DefaultGameBoard(moveHistory, isWhiteSide);
+        TileUI[] chessBoard = gameBoard.getChessBoard();
+        MoveAlgorithm moveAlgorithm = new MoveAlgorithm(moveHistory);
+        GameUI gameUI = new GameUI(chessBoard, moveAlgorithm, moveHistory);
+
+        gameUI.createGameUI();
+        frame.dispose();
     }
 
     /**

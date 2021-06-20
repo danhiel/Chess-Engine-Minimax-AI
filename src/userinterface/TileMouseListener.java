@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class TileMouseListener implements MouseListener, MouseMotionListener {
 
-    private final TileUI boardTile;
+    private final TileUI chessTile;
     private final TileUI[] chessBoard;
     private final JLayeredPane boardJLayeredPane;
     private final Stack<MoveHistory> moveHistory;
@@ -37,15 +37,15 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     /**
      * Constructor for the TileMouseListener.
      * 
-     * @param boardTile the given singular tile taken from the chessboard.
+     * @param chessTile the given singular tile taken from the chessboard.
      * @param chessBoard the main chessboard that tracks board-state.
      * @param boardJLayeredPane the layered pane that will help track mouse position.
      * @param moveAlgorithm controls piece movement in the game.
      * @param moveHistory tracks move history.
      */
-    public TileMouseListener(TileUI boardTile, TileUI[] chessBoard, JLayeredPane boardJLayeredPane,
+    public TileMouseListener(TileUI chessTile, TileUI[] chessBoard, JLayeredPane boardJLayeredPane,
                              MoveAlgorithm moveAlgorithm, Stack<MoveHistory> moveHistory) {
-        this.boardTile = boardTile;
+        this.chessTile = chessTile;
         this.chessBoard = chessBoard;
         this.moveAlgorithm = moveAlgorithm;
         this.moveHistory = moveHistory;
@@ -57,7 +57,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
      */
     @Override
     public void mousePressed(MouseEvent e) {
-        Piece selectedPiece = boardTile.getAssignedPiece();
+        Piece selectedPiece = chessTile.getAssignedPiece();
         if (isRespectivePlayersTurn(selectedPiece)) {
 
             // Unselects the selected piece.
@@ -83,9 +83,9 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
                     transferPieceImageToDragLayer();
                     updatePieceImageLocation();
                 } else {
-                    if (savedMoves.contains(boardTile.getTileID())) {
-                        moveAlgorithm.movePieceToSquare(savedPiece.getPiecePosition(),
-                                boardTile.getTileID());
+                    if (savedMoves.contains(chessTile.getTileID())) {
+                        moveAlgorithm.movePieceToSquare(chessBoard, savedPiece.getPiecePosition(),
+                                chessTile.getTileID());
                     }
                     savedPiece = null;
                 }
@@ -103,7 +103,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
         if (savedPieceImage != null) {
 
             // Get the chessBoardJPanel height and width size
-            Component comp = boardTile.getTileJPanel().getParent();
+            Component comp = chessTile.getTileJPanel().getParent();
             int height = comp.getSize().height / 8;
             int width = comp.getSize().width / 8;
 
@@ -113,20 +113,20 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
             total += parentComp.getLocation().x / width;
 
 
-            if (boardTile.getTileJPanel() == parentComp){
-                boardTile.setPieceImage(savedPieceImage);
+            if (chessTile.getTileJPanel() == parentComp){
+                chessTile.setPieceImage(savedPieceImage);
                 boardJLayeredPane.repaint();
                 savedPieceImage = null;
             } else {
                 unhighlightAllMoves();
                 if (savedMoves.contains(total)) {
-                    boardTile.setPieceImage(savedPieceImage);
+                    chessTile.setPieceImage(savedPieceImage);
                     boardJLayeredPane.repaint();
                     savedPieceImage = null;
-                    moveAlgorithm.movePieceToSquare(savedPiece.getPiecePosition(),
-                            total);
+                    moveAlgorithm.movePieceToSquare(chessBoard,
+                            savedPiece.getPiecePosition(), total);
                 } else {
-                    boardTile.setPieceImage(savedPieceImage);
+                    chessTile.setPieceImage(savedPieceImage);
                     boardJLayeredPane.repaint();
                     savedPieceImage = null;
                 }
@@ -150,7 +150,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
      */
     public void mouseClicked(MouseEvent e) {
         if (SwingUtilities.isRightMouseButton(e)) {
-            moveAlgorithm.undoMove();
+            moveAlgorithm.undoMove(chessBoard);
         }
     }
 
@@ -212,9 +212,9 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
      * Transfers the piece image to the drag JLayer.
      */
     private void transferPieceImageToDragLayer() {
-        savedPieceImage = boardTile.getPieceImage();
+        savedPieceImage = chessTile.getPieceImage();
         boardJLayeredPane.add(savedPieceImage, JLayeredPane.DRAG_LAYER);
-        boardTile.repaintTilePanel();
+        chessTile.repaintTilePanel();
     }
 
     /**
