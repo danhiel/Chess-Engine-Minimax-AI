@@ -45,9 +45,9 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
      */
     public TileMouseListener(TileUI chessTile,
                              TileUI[] chessBoard,
-                             JLayeredPane boardJLayeredPane,
                              MoveAlgorithm moveAlgorithm,
-                             Stack<MoveHistory> moveHistory) {
+                             Stack<MoveHistory> moveHistory,
+                             JLayeredPane boardJLayeredPane) {
         this.chessTile = chessTile;
         this.chessBoard = chessBoard;
         this.moveAlgorithm = moveAlgorithm;
