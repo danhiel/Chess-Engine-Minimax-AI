@@ -2,6 +2,8 @@ package chessboard;
 
 import chesspieces.*;
 import gamestate.MoveHistory;
+
+import java.util.HashMap;
 import java.util.Stack;
 
 /**
@@ -15,9 +17,9 @@ import java.util.Stack;
 public class DefaultGameBoard {
 
     private final Stack<MoveHistory> moveHistory;
+
     private final Piece[] standardDefaultBoard;
     private final TileUI[] mainChessBoard;
-    
     private final Piece[] whitePiecesSet;
     private final Piece[] blackPiecesSet;
 
