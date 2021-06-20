@@ -84,7 +84,7 @@ public class GameUI {
      */
     private void setUpTileMouseListeners(TileUI boardTile, JPanel tileJPanel) {
         TileMouseListener tileMouseListener = new TileMouseListener(boardTile,
-                chessBoard, boardJLayeredPane, moveAlgorithm, moveHistory);
+                chessBoard, moveAlgorithm, moveHistory, boardJLayeredPane);
         tileJPanel.addMouseMotionListener(tileMouseListener);
         tileJPanel.addMouseListener(tileMouseListener);
     }

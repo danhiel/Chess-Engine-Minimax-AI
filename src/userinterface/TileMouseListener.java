@@ -71,7 +71,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
             // Selects a piece.
             } else if (selectedPiece != null && savedPiece == null) {
                 savedPiece = selectedPiece;
-                savedMoves = selectedPiece.getAllMoves(chessBoard);
+                savedMoves = selectedPiece.getAllMoves(chessBoard, moveAlgorithm);
                 highlightAllMoves();
                 transferPieceImageToDragLayer();
                 updatePieceImageLocation();
@@ -81,7 +81,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
                 unhighlightAllMoves();
                 if (isPieceSelectedAlly(selectedPiece)) {
                     savedPiece = selectedPiece;
-                    savedMoves = selectedPiece.getAllMoves(chessBoard);
+                    savedMoves = selectedPiece.getAllMoves(chessBoard, moveAlgorithm);
                     highlightAllMoves();
                     transferPieceImageToDragLayer();
                     updatePieceImageLocation();
