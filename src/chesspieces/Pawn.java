@@ -1,7 +1,9 @@
 package chesspieces;
 
 import chessboard.Tile;
+import gamestate.MoveAlgorithm;
 import gamestate.MoveHistory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -49,7 +51,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public List<Integer> getAllMoves(Tile[] chessBoard) {
+    public List<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
         List<Integer> allMoves = new ArrayList<Integer>();
 
         for (int move : PAWN_MOVE_SET) {

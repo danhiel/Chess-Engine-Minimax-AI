@@ -1,6 +1,8 @@
 package chesspieces;
 
 import chessboard.Tile;
+import gamestate.MoveAlgorithm;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +46,7 @@ public class King extends Piece {
     }
 
     @Override
-    public List<Integer> getAllMoves(Tile[] chessBoard) {
+    public List<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
         List<Integer> allMoves = new ArrayList<Integer>();
 
         for (int move : KING_MOVE_SET) {

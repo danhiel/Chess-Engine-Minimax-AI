@@ -1,6 +1,7 @@
 package chesspieces;
 
 import chessboard.Tile;
+import gamestate.MoveAlgorithm;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public List<Integer> getAllMoves(Tile[] chessBoard) {
+    public List<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
         return getRepeatedMoves(chessBoard, BISHOP_MOVE_SET);
     }
 }

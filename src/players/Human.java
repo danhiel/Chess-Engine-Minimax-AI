@@ -51,7 +51,7 @@ public class Human extends Player {
 
     private void highlightPiece(Piece selectedPiece) {
         highlightedPiece = selectedPiece;
-        highlightedMoves = selectedPiece.getAllMoves(boardTiles);
+        highlightedMoves = selectedPiece.getAllMoves(boardTiles, moveAlgorithm);
         boardTiles[selectedPiece.getPiecePosition()].assignHighlightTileColor();
         System.out.println(highlightedMoves);
         for (int moveID : highlightedMoves) {

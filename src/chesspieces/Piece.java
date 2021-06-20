@@ -1,9 +1,10 @@
 package chesspieces;
 
+import chessboard.Tile;
+import gamestate.MoveAlgorithm;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import chessboard.Tile;
 
 /**
  * The class provides basic chess piece functionalities.
@@ -40,7 +41,7 @@ public abstract class Piece {
 
     public abstract int getPieceValue();
 
-    public abstract List<Integer> getAllMoves(Tile[] chessBoard);
+    public abstract List<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg);
 
     protected boolean isEnemy(Tile tile) {
         Piece assignedPiece = tile.getAssignedPiece();

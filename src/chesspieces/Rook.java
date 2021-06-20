@@ -1,6 +1,7 @@
 package chesspieces;
 
 import chessboard.Tile;
+import gamestate.MoveAlgorithm;
 
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class Rook extends Piece {
     }
 
     @Override
-    public List<Integer> getAllMoves(Tile[] chessBoard) {
+    public List<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
         return getRepeatedMoves(chessBoard, ROOK_MOVE_SET);
     }
 }
