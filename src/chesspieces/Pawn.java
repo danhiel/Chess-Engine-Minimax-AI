@@ -1,7 +1,6 @@
 package chesspieces;
 
-import chessboard.Tile;
-import gamestate.MoveAlgorithm;
+import chessboard.TileUI;
 import gamestate.MoveHistory;
 
 import java.util.Set;
@@ -51,12 +50,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public Set<Integer> getAllLegalMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
-        return getPrunedCheckMoves(getAllMoves(chessBoard), chessBoard, moveAlg);
-    }
-
-    @Override
-    public Set<Integer> getAllMoves(Tile[] chessBoard) {
+    public Set<Integer> getAllMoves(TileUI[] chessBoard) {
         Set<Integer> allMoves = new HashSet<Integer>();
 
         for (int move : PAWN_MOVE_SET) {
@@ -77,7 +71,7 @@ public class Pawn extends Piece {
         return move;
     }
 
-    private void addNormalMoves(Set<Integer> allMoves, Tile[] chessBoard,
+    private void addNormalMoves(Set<Integer> allMoves, TileUI[] chessBoard,
                                       int finalPosition, int move) {
         if (chessBoard[finalPosition].getAssignedPiece() == null) {
             if (move == 8) {
@@ -90,7 +84,7 @@ public class Pawn extends Piece {
         }
     }
 
-    private void addAttackMoves(Set<Integer> allMoves, Tile[] chessBoard,
+    private void addAttackMoves(Set<Integer> allMoves, TileUI[] chessBoard,
                                       int finalPosition, int move) {
         if ((move == 7 || move == 9)) {
             if (isEnemy(chessBoard[finalPosition])) {
@@ -108,7 +102,7 @@ public class Pawn extends Piece {
                 || !IS_BOT_SIDE && (piecePosition >= 32 && piecePosition <= 39);
     }
 
-    private boolean isEnpassantLegal(Tile[] chessBoard, int move) {
+    private boolean isEnpassantLegal(TileUI[] chessBoard, int move) {
         if (!moveHistory.isEmpty()) {
             MoveHistory recentMove = moveHistory.peek();
 

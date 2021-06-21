@@ -1,10 +1,9 @@
 package chesspieces;
 
-import chessboard.Tile;
+import chessboard.TileUI;
 import gamestate.MoveAlgorithm;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -42,17 +41,19 @@ public abstract class Piece {
 
     public abstract int getPieceValue();
 
-    public abstract Set<Integer> getAllLegalMoves(Tile[] chessBoard, MoveAlgorithm moveAlg);
+    public abstract Set<Integer> getAllMoves(TileUI[] chessBoard);
 
-    public abstract Set<Integer> getAllMoves(Tile[] chessBoard);
-
-    protected Set<Integer> getPrunedCheckMoves(Set<Integer> allMoves,
-                                               Tile[] chessBoard,
-                                               MoveAlgorithm moveAlg) {
+    public Set<Integer> getAllLegalMoves(Set<Integer> allMoves,
+                                         TileUI[] chessBoard,
+                                         MoveAlgorithm moveAlg) {
+        for (int move : allMoves) {
+            moveAlg.simulateMovePieceToSquare(chessBoard, piecePosition, move);
+            moveAlg.simulateUndoMove(chessBoard);
+        }
         return allMoves;
     }
 
-    protected boolean isEnemy(Tile tile) {
+    protected boolean isEnemy(TileUI tile) {
         Piece assignedPiece = tile.getAssignedPiece();
         if (assignedPiece != null) {
             return assignedPiece.IS_WHITE_PIECE != this.IS_WHITE_PIECE;
@@ -74,7 +75,7 @@ public abstract class Piece {
         return false;
     }
 
-    protected Set<Integer> getRepeatedMoves(Tile[] chessBoard, int[] moveSet) {
+    protected Set<Integer> getRepeatedMoves(TileUI[] chessBoard, int[] moveSet) {
         Set<Integer> allRepeatedMoves = new HashSet<Integer>();
 
         for (int move : moveSet) {

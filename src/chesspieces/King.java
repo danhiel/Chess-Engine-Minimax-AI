@@ -1,7 +1,6 @@
 package chesspieces;
 
-import chessboard.Tile;
-import gamestate.MoveAlgorithm;
+import chessboard.TileUI;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -46,12 +45,7 @@ public class King extends Piece {
     }
 
     @Override
-    public Set<Integer> getAllLegalMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
-        return getAllMoves(chessBoard);
-    }
-
-    @Override
-    public Set<Integer> getAllMoves(Tile[] chessBoard) {
+    public Set<Integer> getAllMoves(TileUI[] chessBoard) {
         Set<Integer> allMoves = new HashSet<Integer>();
 
         for (int move : KING_MOVE_SET) {
@@ -64,7 +58,7 @@ public class King extends Piece {
     }
 
     private void addNormalMoves(Set<Integer> allMoves,
-                                Tile[] chessBoard,
+                                TileUI[] chessBoard,
                                 int finalPosition) {
         if (isWithinLegalColumns(finalPosition, piecePosition)
                 && (chessBoard[finalPosition].getAssignedPiece() == null
@@ -73,7 +67,7 @@ public class King extends Piece {
         }
     }
 
-    private void addCastlingMoves(Set<Integer> allMoves, Tile[] chessBoard) {
+    private void addCastlingMoves(Set<Integer> allMoves, TileUI[] chessBoard) {
         if (isFirstMove) {
             Rook leftRook = getRook(chessBoard, true);
             Rook rightRook = getRook(chessBoard, false);
@@ -91,7 +85,7 @@ public class King extends Piece {
         }
     }
 
-    private Rook getRook(Tile[] chessBoard, boolean isLeftSide) {
+    private Rook getRook(TileUI[] chessBoard, boolean isLeftSide) {
         int rookPosition = getRookPosition(isLeftSide);
         Piece chessPiece = chessBoard[rookPosition].getAssignedPiece();
         if (chessPiece != null 
@@ -109,7 +103,7 @@ public class King extends Piece {
         }
     }
 
-    private boolean checkIfLeftCastlingLegal(Tile[] chessBoard, Rook leftRook) {
+    private boolean checkIfLeftCastlingLegal(TileUI[] chessBoard, Rook leftRook) {
         for (int i = leftRook.piecePosition + 1; i < this.piecePosition; i++) {
             if (chessBoard[i].getAssignedPiece() != null) {
                 return false;
@@ -118,7 +112,7 @@ public class King extends Piece {
         return true;
     }
 
-    private boolean checkIfRightCastlingLegal(Tile[] chessBoard, Rook rightRook) {
+    private boolean checkIfRightCastlingLegal(TileUI[] chessBoard, Rook rightRook) {
         for (int i = rightRook.piecePosition - 1; i > this.piecePosition; i--) {
             if (chessBoard[i].getAssignedPiece() != null) {
                 return false;
