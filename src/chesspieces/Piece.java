@@ -44,10 +44,12 @@ public abstract class Piece {
 
     public abstract Set<Integer> getAllLegalMoves(Tile[] chessBoard, MoveAlgorithm moveAlg);
 
-    public abstract Set<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg);
+    public abstract Set<Integer> getAllMoves(Tile[] chessBoard);
 
-    protected Set<Integer> getPrunedMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
-        
+    protected Set<Integer> getPrunedCheckMoves(Set<Integer> allMoves,
+                                               Tile[] chessBoard,
+                                               MoveAlgorithm moveAlg) {
+        return allMoves;
     }
 
     protected boolean isEnemy(Tile tile) {

@@ -36,11 +36,11 @@ public class Queen extends Piece {
 
     @Override
     public Set<Integer> getAllLegalMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
-        return getAllMoves(chessBoard, moveAlg);
+        return getAllMoves(chessBoard);
     }
 
     @Override
-    public Set<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
+    public Set<Integer> getAllMoves(Tile[] chessBoard) {
         return getRepeatedMoves(chessBoard, QUEEN_MOVE_SET);
     }
 }

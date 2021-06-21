@@ -52,11 +52,11 @@ public class Pawn extends Piece {
 
     @Override
     public Set<Integer> getAllLegalMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
-        return getAllMoves(chessBoard, moveAlg);
+        return getPrunedCheckMoves(getAllMoves(chessBoard), chessBoard, moveAlg);
     }
 
     @Override
-    public Set<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
+    public Set<Integer> getAllMoves(Tile[] chessBoard) {
         Set<Integer> allMoves = new HashSet<Integer>();
 
         for (int move : PAWN_MOVE_SET) {

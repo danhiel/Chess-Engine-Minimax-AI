@@ -37,11 +37,11 @@ public class Knight extends Piece {
 
     @Override
     public Set<Integer> getAllLegalMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
-        return getAllMoves(chessBoard, moveAlg);
+        return getAllMoves(chessBoard);
     }
 
     @Override
-    public Set<Integer> getAllMoves(Tile[] chessBoard, MoveAlgorithm moveAlg) {
+    public Set<Integer> getAllMoves(Tile[] chessBoard) {
         Set<Integer> allMoves = new HashSet<Integer>();
 
         for (int move : KNIGHT_MOVE_SET) {
