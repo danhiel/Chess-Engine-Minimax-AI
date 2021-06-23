@@ -1,6 +1,7 @@
 package chesspieces;
 
 import chessboard.TileUI;
+import gamestate.GameState;
 import gamestate.MoveAlgorithm;
 
 import java.util.HashSet;
@@ -25,7 +26,7 @@ public abstract class Piece {
         this.piecePosition = piecePosition;
     }
 
-    public boolean isPieceWhite() {
+    public boolean getIsPieceWhite() {
         return IS_WHITE_PIECE;
     }
 
@@ -44,10 +45,12 @@ public abstract class Piece {
     public abstract Set<Integer> getAllMoves(TileUI[] chessBoard);
 
     public Set<Integer> getAllLegalMoves(Set<Integer> allMoves,
+                                         GameState gameState,
                                          TileUI[] chessBoard,
                                          MoveAlgorithm moveAlg) {
         for (int move : allMoves) {
             moveAlg.simulateMovePieceToSquare(chessBoard, piecePosition, move);
+            
             moveAlg.simulateUndoMove(chessBoard);
         }
         return allMoves;

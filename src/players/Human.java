@@ -46,7 +46,7 @@ public class Human extends Player {
         if (selectedPiece == null) {
             return false;
         }
-        return selectedPiece.isPieceWhite() && isPlayerWhite;
+        return selectedPiece.getIsPieceWhite() && isPlayerWhite;
     }
 
     private void highlightPiece(Piece selectedPiece) {

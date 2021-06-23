@@ -1,8 +1,8 @@
 package userinterface;
 
 import chessboard.DefaultGameBoard;
-import chessboard.TileUI;
 import gamestate.MoveHistory;
+import gamestate.GameState;
 import gamestate.MoveAlgorithm;
 
 import javax.swing.JFrame;
@@ -110,9 +110,9 @@ public class StartUI {
     private void startChessGame(boolean isWhiteSide) {
         Stack<MoveHistory> moveHistory = new Stack<MoveHistory>();
         DefaultGameBoard gameBoard = new DefaultGameBoard(moveHistory, isWhiteSide);
-        TileUI[] chessBoard = gameBoard.getChessBoard();
+        GameState gameState = new GameState(gameBoard.getChessBoard(), isWhiteSide);
         MoveAlgorithm moveAlgorithm = new MoveAlgorithm(moveHistory);
-        GameUI gameUI = new GameUI(chessBoard, moveAlgorithm, moveHistory);
+        GameUI gameUI = new GameUI(gameState, moveAlgorithm, moveHistory);
 
         gameUI.createGameUI();
         frame.dispose();

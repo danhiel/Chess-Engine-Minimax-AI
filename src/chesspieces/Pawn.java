@@ -31,7 +31,7 @@ public class Pawn extends Piece {
         isFirstMove = true;
     }
 
-    public boolean isFirstMove() {
+    public boolean getIsFirstMove() {
         return isFirstMove;
     }
 

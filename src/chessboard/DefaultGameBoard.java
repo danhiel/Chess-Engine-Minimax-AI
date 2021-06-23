@@ -19,8 +19,6 @@ public class DefaultGameBoard {
 
     private final Piece[] standardDefaultBoard;
     private final TileUI[] mainChessBoard;
-    private final Piece[] whitePiecesSet;
-    private final Piece[] blackPiecesSet;
 
     /**
      * Constructor for DefaultGameBoard.
@@ -28,14 +26,11 @@ public class DefaultGameBoard {
      * @param moveHistory the move history of the game.
      * @param isPlayerWhiteSide true if player is white sided, false if not.
      */
-    public DefaultGameBoard(final Stack<MoveHistory> moveHistory,
+    public DefaultGameBoard(Stack<MoveHistory> moveHistory,
                             boolean isPlayerWhiteSide) {
         this.moveHistory = moveHistory;
         this.standardDefaultBoard = setUpStandardBoard(isPlayerWhiteSide);
         this.mainChessBoard = setUpMainBoard();
-
-        whitePiecesSet = saveChessPieces(0);
-        blackPiecesSet = saveChessPieces(48);
     }
 
     /**
@@ -45,51 +40,6 @@ public class DefaultGameBoard {
      */
     public TileUI[] getChessBoard() {
         return mainChessBoard;
-    }
-    
-    /**
-     * Returns all of the white chess pieces.
-     * 
-     * @return Piece[] representing all of the white chess pieces.
-     */
-    public Piece[] getWhitePieces() {
-        return whitePiecesSet;
-    }
-    
-    /**
-     * Returns all of the black chess pieces.
-     * 
-     * @return Piece[] representing all of the black chess pieces.
-     */
-    public Piece[] getBlackPieces() {
-        return blackPiecesSet;
-    }
-
-    /**
-     * Sets up the TileUI[] board representing our (main) chessboard.
-     * 
-     * @return main tile chessboard.
-     */
-    private TileUI[] setUpMainBoard() {
-        TileUI[] chessBoard = new TileUI[64];
-        for (int i = 0; i < chessBoard.length; i++) {
-            chessBoard[i] = new TileUI(i, standardDefaultBoard[i]);
-        }
-        return chessBoard;
-    }
-
-    /**
-     * Saves the chess pieces to an array.  
-     * 
-     * @param index the starting index of a chessboard to iterate through to index + 16.
-     * @return Piece[] representing a set of chess pieces.
-     */
-    private Piece[] saveChessPieces(int index) {
-        Piece[] chessPieces = new Piece[16];
-        for (int i = index; i < index + 16; i++) {
-            chessPieces[i - index] = mainChessBoard[i].getAssignedPiece();
-        }
-        return chessPieces;
     }
 
     /**
@@ -129,5 +79,18 @@ public class DefaultGameBoard {
         standardBoard[63] = new Rook(isPlayerWhiteSide, startBotSide, 63);
 
         return standardBoard;
+    }
+
+    /**
+     * Sets up the TileUI[] board representing our (main) chessboard.
+     * 
+     * @return main tile chessboard.
+     */
+    private TileUI[] setUpMainBoard() {
+        TileUI[] chessBoard = new TileUI[64];
+        for (int i = 0; i < chessBoard.length; i++) {
+            chessBoard[i] = new TileUI(i, standardDefaultBoard[i]);
+        }
+        return chessBoard;
     }
 }

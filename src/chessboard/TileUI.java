@@ -137,7 +137,7 @@ public class TileUI extends Tile {
      */
     private void assignChessPieceImage() {
         if (assignedPiece != null) {
-            if (assignedPiece.isPieceWhite()) {
+            if (assignedPiece.getIsPieceWhite()) {
                 pieceImage = new JLabel(new ImageIcon("img/White"
                         + assignedPiece.getPieceType() + ".png"));
             } else {

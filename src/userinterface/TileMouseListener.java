@@ -2,6 +2,7 @@ package userinterface;
 
 import chessboard.TileUI;
 import chesspieces.Piece;
+import gamestate.GameState;
 import gamestate.MoveAlgorithm;
 import gamestate.MoveHistory;
 
@@ -24,6 +25,7 @@ import java.util.Set;
  */
 public class TileMouseListener implements MouseListener, MouseMotionListener {
 
+    private final GameState gameState;
     private final TileUI chessTile;
     private final TileUI[] chessBoard;
     private final JLayeredPane boardJLayeredPane;
@@ -44,12 +46,13 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
      * @param moveHistory tracks move history.
      */
     public TileMouseListener(TileUI chessTile,
-                             TileUI[] chessBoard,
+                             GameState gameState,
                              MoveAlgorithm moveAlgorithm,
                              Stack<MoveHistory> moveHistory,
                              JLayeredPane boardJLayeredPane) {
         this.chessTile = chessTile;
-        this.chessBoard = chessBoard;
+        this.gameState = gameState;
+        this.chessBoard = gameState.getChessBoard();
         this.moveAlgorithm = moveAlgorithm;
         this.moveHistory = moveHistory;
         this.boardJLayeredPane = boardJLayeredPane;
@@ -175,7 +178,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
         if (savedPiece != null) {
             return true;
         } else if (selectedPiece != null) {
-            return (totalTurns % 2 == 0) == selectedPiece.isPieceWhite();
+            return (totalTurns % 2 == 0) == selectedPiece.getIsPieceWhite();
         }
         return false;
     }
@@ -188,7 +191,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
      */
     private boolean isPieceSelectedAlly(Piece selectedPiece) {
         return selectedPiece != null
-                && savedPiece.isPieceWhite() == selectedPiece.isPieceWhite();
+                && savedPiece.getIsPieceWhite() == selectedPiece.getIsPieceWhite();
     }
 
     /**
