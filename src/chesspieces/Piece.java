@@ -19,11 +19,13 @@ public abstract class Piece {
     protected final boolean IS_WHITE_PIECE;
     protected final boolean IS_BOT_SIDE;
     protected int piecePosition;
+    protected boolean isFirstMove;
 
     public Piece(boolean isWhite, boolean isBotSide, int piecePosition) {
         this.IS_WHITE_PIECE = isWhite;
         this.IS_BOT_SIDE = isBotSide;
         this.piecePosition = piecePosition;
+        isFirstMove = true;
     }
 
     public boolean getIsPieceWhite() {
@@ -38,22 +40,33 @@ public abstract class Piece {
         this.piecePosition = piecePosition;
     }
 
+    public boolean getIsFirstMove() {
+        return isFirstMove;
+    }
+
+    public void setIsFirstMove(boolean isFirstMove) {
+        this.isFirstMove = isFirstMove;
+    }
+
     public abstract String getPieceType();
 
     public abstract int getPieceValue();
 
     public abstract Set<Integer> getAllMoves(TileUI[] chessBoard);
 
-    public Set<Integer> getAllLegalMoves(Set<Integer> allMoves,
-                                         GameState gameState,
+    public Set<Integer> getAllLegalMoves(GameState gameState,
                                          TileUI[] chessBoard,
                                          MoveAlgorithm moveAlg) {
-        for (int move : allMoves) {
-            moveAlg.simulateMovePieceToSquare(chessBoard, piecePosition, move);
-            
+        Set<Integer> allMoves = getAllMoves(chessBoard);
+        Set<Integer> prunedMoves = new HashSet<Integer>();
+        for (int moveID : allMoves) {
+            moveAlg.simulateMovePieceToSquare(chessBoard, piecePosition, moveID);
+            if (!gameState.calcIfKingIsCheck(IS_WHITE_PIECE)) {
+                prunedMoves.add(moveID);
+            }
             moveAlg.simulateUndoMove(chessBoard);
         }
-        return allMoves;
+        return prunedMoves;
     }
 
     protected boolean isEnemy(TileUI tile) {

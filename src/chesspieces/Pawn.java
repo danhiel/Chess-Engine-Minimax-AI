@@ -21,22 +21,12 @@ public class Pawn extends Piece {
 
     private static final int[] PAWN_MOVE_SET = {8, 16, 7, 9};
     private static final int PIECE_VALUE = 1;
-    private boolean isFirstMove;
     private Stack<MoveHistory> moveHistory;
 
     public Pawn(boolean isWhitePiece, boolean isBotSide, int piecePosition, 
                 Stack<MoveHistory> moveHistory) {
         super(isWhitePiece, isBotSide, piecePosition);
         this.moveHistory = moveHistory;
-        isFirstMove = true;
-    }
-
-    public boolean getIsFirstMove() {
-        return isFirstMove;
-    }
-
-    public void setIsFirstMove(boolean isFirstMove) {
-        this.isFirstMove = isFirstMove;
     }
 
     @Override

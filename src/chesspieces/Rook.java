@@ -18,19 +18,9 @@ public class Rook extends Piece {
 
     private static final int[] ROOK_MOVE_SET = {-8, -1, 1, 8};
     private static final int PIECE_VALUE = 5;
-    private boolean isFirstMove;
 
     public Rook(boolean isWhitePiece, boolean isBotSide, int piecePosition) {
         super(isWhitePiece, isBotSide, piecePosition);
-        isFirstMove = true;
-    }
-
-    public boolean isFirstMove() {
-        return isFirstMove;
-    }
-
-    public void setIsFirstMove(boolean isFirstMove) {
-        this.isFirstMove = isFirstMove;
     }
 
     @Override

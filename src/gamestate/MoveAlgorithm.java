@@ -3,19 +3,38 @@ package gamestate;
 import chessboard.TileUI;
 import chesspieces.*;
 
-import java.util.List;
 import java.util.Stack;
 
 public class MoveAlgorithm {
 
     private final Stack<MoveHistory> moveHistory;
-    private boolean isFirstMove;
     private Piece pieceAttacked;
     
     public MoveAlgorithm(Stack<MoveHistory> moveHistory) {
         this.moveHistory = moveHistory;
-        isFirstMove = true;
         pieceAttacked = null;
+    }
+
+    public void movePieceToSquare(TileUI[] chessBoard,
+                                  int oldPosID,
+                                  int newPosID) {
+        simulateMovePieceToSquare(chessBoard, oldPosID, newPosID);
+        repaintChessBoard(chessBoard, pieceAttacked, oldPosID, newPosID);
+    }
+
+    public void simulateMovePieceToSquare(TileUI[] chessBoard,
+                                          int oldPosID,
+                                          int newPosID) {
+        Piece pieceMoved = chessBoard[oldPosID].getAssignedPiece();
+        String pieceMovedType = pieceMoved.getPieceType();
+        pieceAttacked = calculatePieceAttacked(chessBoard, oldPosID,
+                                               newPosID, pieceMovedType);
+
+        saveMoveToHistory(pieceMoved, pieceAttacked);
+        pieceMoved.setIsFirstMove(false);
+        updatePiecePositions(chessBoard, pieceMoved,
+                             pieceAttacked, oldPosID,
+                             newPosID);
     }
 
     public void undoMove(TileUI[] chessBoard) {
@@ -26,74 +45,43 @@ public class MoveAlgorithm {
         MoveHistory recentMove = moveHistory.pop();
         Piece pieceMoved = recentMove.getPieceMoved();
         Piece pieceAttacked = recentMove.getPieceAttacked();
-        boolean isFirstMove = recentMove.isFirstMove();
         int fromPositionID = recentMove.getOldPieceMovedPos();
         int toPositionID = recentMove.getOldPieceAttackedPos();
+        
+        // Update pieceMoved chessboard positions
+        chessBoard[pieceMoved.getPiecePosition()].setAssignedPiece(null);
+        chessBoard[fromPositionID].setAssignedPiece(pieceMoved);
+        pieceMoved.setPiecePosition(fromPositionID);
+        pieceMoved.setIsFirstMove(recentMove.isFirstMove());
 
+        // Update pieceAttacked chessboard positions
         if (pieceAttacked != null) {
             chessBoard[pieceAttacked.getPiecePosition()].setAssignedPiece(null);
-            pieceAttacked.setPiecePosition(toPositionID);
             chessBoard[toPositionID].setAssignedPiece(pieceAttacked);
+            pieceAttacked.setPiecePosition(toPositionID);
         }
-        chessBoard[pieceMoved.getPiecePosition()].setAssignedPiece(null);
-        pieceMoved.setPiecePosition(fromPositionID);
-        chessBoard[fromPositionID].setAssignedPiece(pieceMoved);
     }
 
-    public void movePieceToSquare(TileUI[] chessBoard,
-                                  int currentPosition,
-                                  int finalPosition) {
-        simulateMovePieceToSquare(chessBoard, currentPosition, finalPosition);
-        repaintChessBoard(chessBoard, pieceAttacked, currentPosition, finalPosition);
-    }
-
-    public void simulateMovePieceToSquare(TileUI[] chessBoard,
-                                          int currentPosition,
-                                          int finalPosition) {
-        Piece pieceMoved = chessBoard[currentPosition].getAssignedPiece();
-        String pieceMovedType = pieceMoved.getPieceType();
-        pieceAttacked = calculatePieceAttacked(chessBoard, currentPosition,
-                                               finalPosition, pieceMovedType);
-
-        saveMoveToHistory(pieceMoved, pieceAttacked);
-        updatePieceFirstMove(pieceMovedType, pieceMoved);
-        updatePiecePositions(chessBoard, pieceMoved,
-                             pieceAttacked, currentPosition,
-                             finalPosition);
-    }
-
-    private Piece calculatePieceAttacked(TileUI[] chessBoard, int currentPosition,
-                                         int finalPosition, String pieceMovedType) {
-        Piece pieceAttacked = chessBoard[finalPosition].getAssignedPiece();
+    private Piece calculatePieceAttacked(TileUI[] chessBoard, int oldPosID,
+                                         int newPosID, String pieceMovedType) {
+        Piece pieceAttacked = chessBoard[newPosID].getAssignedPiece();
+        
         if (pieceMovedType.equals("Pawn")
-                && currentPosition % 8 != finalPosition % 8
+                && oldPosID % 8 != newPosID % 8
                 && pieceAttacked == null) {
-            int enpassantPosition = (finalPosition % 8 - currentPosition % 8) + currentPosition;
+            int enpassantPosition = (newPosID % 8 - oldPosID % 8) + oldPosID;
             return chessBoard[enpassantPosition].getAssignedPiece();
 
         } else if (pieceMovedType.equals("King")) {
             int castlePosition;
-            if (finalPosition - currentPosition > 0) {
-                castlePosition = finalPosition + 1;
+            if (newPosID - oldPosID > 0) {
+                castlePosition = newPosID + 1;
             } else {
-                castlePosition = finalPosition - 2;
+                castlePosition = newPosID - 2;
             }
             return chessBoard[castlePosition].getAssignedPiece();
         }
         return pieceAttacked;
-    }
-
-    private void updatePieceFirstMove(String pieceMovedType, Piece pieceMoved) {
-        if (pieceMovedType.equals("Pawn")) {
-            ((Pawn) pieceMoved).setIsFirstMove(false);
-            isFirstMove = true;
-        } else if (pieceMovedType.equals("Rook")) {
-            ((Rook) pieceMoved).setIsFirstMove(false);
-            isFirstMove = true;
-        } else if (pieceMovedType.equals("King")) {
-            ((King) pieceMoved).setIsFirstMove(false);
-            isFirstMove = true;
-        }
     }
 
     private void updatePiecePositions(TileUI[] chessBoard, Piece pieceMoved,
@@ -128,8 +116,10 @@ public class MoveAlgorithm {
             pieceAttackedPos = pieceAttacked.getPiecePosition();
         }
         moveHistory.push(new MoveHistory(pieceMoved.getPiecePosition(),
-                pieceAttackedPos, pieceMoved, pieceMoved, isFirstMove));
-        isFirstMove = false;
+                                         pieceAttackedPos,
+                                         pieceMoved,
+                                         pieceAttacked,
+                                         pieceMoved.getIsFirstMove()));
     }
 
     private void repaintChessBoard(TileUI[] chessBoard, Piece pieceAttacked,
@@ -149,8 +139,5 @@ public class MoveAlgorithm {
                 chessBoard[castlePosition].resetTilePanel();
             }
         }
-    }
-
-    public void pruneKingInCheckMoves(List<Integer> allMoves) {
     }
 }

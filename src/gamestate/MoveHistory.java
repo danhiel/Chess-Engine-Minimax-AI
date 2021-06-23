@@ -10,10 +10,10 @@ public class MoveHistory {
     private final Piece pieceAttacked;
     private final boolean isFirstMove;
 
-    public MoveHistory(int currentPosition, int finalPosition, Piece pieceMoved,
+    public MoveHistory(int pieceMovedPos, int pieceAttackedPos, Piece pieceMoved,
                        Piece pieceAttacked, boolean isFirstMove) {
-        this.oldPieceMovedPos = currentPosition;
-        this.oldPieceAttackedPos = finalPosition;
+        this.oldPieceMovedPos = pieceMovedPos;
+        this.oldPieceAttackedPos = pieceAttackedPos;
         this.pieceMoved = pieceMoved;
         this.pieceAttacked = pieceAttacked;
         this.isFirstMove = isFirstMove;

@@ -17,9 +17,6 @@ public class GameState {
 
     private Set<Piece> aliveWhitePieces;
     private Set<Piece> aliveBlackPieces;
-
-    private Map<Integer, HashSet<Piece>> whiteThreatenedTiles;
-    private Map<Integer, HashSet<Piece>> blackThreatenedTiles;
     
     public GameState(TileUI[] chessBoard, boolean isWhiteSide) {
         this.chessBoard = chessBoard;
@@ -27,17 +24,14 @@ public class GameState {
         if (isWhiteSide) {
             this.whiteKing = chessBoard[60].getAssignedPiece();
             this.blackKing = chessBoard[4].getAssignedPiece();
-            this.aliveWhitePieces = saveChessPieces(0);
-            this.aliveBlackPieces = saveChessPieces(48);
+            this.aliveWhitePieces = saveChessPieces(48);
+            this.aliveBlackPieces = saveChessPieces(0);
         } else {
             this.whiteKing = chessBoard[4].getAssignedPiece();
             this.blackKing = chessBoard[60].getAssignedPiece();
-            this.aliveWhitePieces = saveChessPieces(48);
-            this.aliveBlackPieces = saveChessPieces(0);
+            this.aliveWhitePieces = saveChessPieces(0);
+            this.aliveBlackPieces = saveChessPieces(48);
         }
-
-        whiteThreatenedTiles = new HashMap<Integer, HashSet<Piece>>();
-        blackThreatenedTiles = new HashMap<Integer, HashSet<Piece>>();
     }
 
     public TileUI[] getChessBoard() {
@@ -61,54 +55,22 @@ public class GameState {
     }
 
     /**
-     * Recalculates the threatened tiles being manipulated. 
+     * Returns whether the given side has their king check or not.
      * 
-     * @param piece the piece that was most recently moved.
-     * @param oldPos the tile position the piece was before moving.
-     * @return
+     * @param isWhiteSide true if white side, false if not.
+     * @return true if the given side has their king check, false otherwise.
      */
-    public void calcThreatenedTiles(Piece piece, int oldPos) {
-        Map<Integer, HashSet<Piece>> threatenedTiles = piece.getIsPieceWhite() ?
-                                                       whiteThreatenedTiles :
-                                                       blackThreatenedTiles;
-        Map<Integer, HashSet<Piece>> oppThreatenedTiles = piece.getIsPieceWhite() ?
-                                                          whiteThreatenedTiles :
-                                                          blackThreatenedTiles;
+    public boolean calcIfKingIsCheck(boolean isWhiteSide) {
+        Set<Piece> alivePieces = isWhiteSide ? aliveBlackPieces : aliveWhitePieces;
+        Piece king = isWhiteSide ? whiteKing : blackKing;
 
-        Set<Piece> attackingPieces = threatenedTiles.get(oldPos);
-        for (Piece attackingPiece : attackingPieces) {
-            Set<Integer> allMoves = attackingPiece.getAllMoves(chessBoard);
-            threatenedTiles.remove(oldPos);
-            for (Integer move : allMoves) {
-                if (!threatenedTiles.containsKey(move)) {
-                    threatenedTiles.put(move, new HashSet<>());
-                }
-                threatenedTiles.get(move).add(attackingPiece);
-            }
-        }
-
-        Set<Integer> currPieceMoves = piece.getAllMoves(chessBoard);
-        for (int move : currPieceMoves) {
-            if (!oppThreatenedTiles.containsKey(move)) {
-                oppThreatenedTiles.put(move, new HashSet<>());
-            }
-            oppThreatenedTiles.get(move).add(piece);
-        }
-
-
-    }
-
-    public boolean calcIsWhiteCheck() {
-        for (Piece piece : aliveBlackPieces) {
+        for (Piece piece : alivePieces) {
             Set<Integer> allMoves = piece.getAllMoves(chessBoard);
-            if (allMoves.contains(whiteKing.getPiecePosition())) {
+            if (allMoves.contains(king.getPiecePosition())) {
+                System.out.println(allMoves.toString());
                 return true;
             }
         }
-        return false;
-    }
-
-    public boolean calcIsBlackCheck() {
         return false;
     }
 

@@ -19,21 +19,11 @@ public class King extends Piece {
 
     private static final int[] KING_MOVE_SET = {-9, -8, -7, -1, 1, 7, 8, 9};
     private static final int PIECE_VALUE = 10;
-    private boolean isFirstMove;
     private boolean isCheck;
 
     public King(boolean isWhitePiece, boolean isBotSide, int piecePosition) {
         super(isWhitePiece, isBotSide, piecePosition);
-        isFirstMove = true;
         isCheck = false;
-    }
-
-    public boolean getIsFirstMove() {
-        return isFirstMove;
-    }
-
-    public void setIsFirstMove(boolean isFirstMove) {
-        this.isFirstMove = isFirstMove;
     }
 
     public boolean getIsCheck() {
@@ -79,12 +69,12 @@ public class King extends Piece {
             Rook rightRook = getRook(chessBoard, false);
 
             if (leftRook != null 
-                    && leftRook.isFirstMove() 
+                    && leftRook.getIsFirstMove() 
                     && checkIfLeftCastlingLegal(chessBoard, leftRook)) {
                 allMoves.add(piecePosition - 2);
             }
             if (rightRook != null 
-                    && rightRook.isFirstMove()
+                    && rightRook.getIsFirstMove()
                     && checkIfRightCastlingLegal(chessBoard, rightRook)) {
                 allMoves.add(piecePosition + 2);
             }
