@@ -26,9 +26,8 @@ public class MoveAlgorithm {
                                           int oldPosID,
                                           int newPosID) {
         Piece pieceMoved = chessBoard[oldPosID].getAssignedPiece();
-        String pieceMovedType = pieceMoved.getPieceType();
         pieceAttacked = calculatePieceAttacked(chessBoard, oldPosID,
-                                               newPosID, pieceMovedType);
+                                               newPosID, pieceMoved);
 
         saveMoveToHistory(pieceMoved, pieceAttacked);
         pieceMoved.setIsFirstMove(false);
@@ -38,7 +37,11 @@ public class MoveAlgorithm {
     }
 
     public void undoMove(TileUI[] chessBoard) {
+        MoveHistory recentMove = moveHistory.peek();
         simulateUndoMove(chessBoard);
+        repaintChessBoard(chessBoard, recentMove.getPieceAttacked(),
+                          recentMove.getOldPieceMovedPos(),
+                          recentMove.getOldPieceAttackedPos());
     }
 
     public void simulateUndoMove(TileUI[] chessBoard) {
@@ -63,23 +66,22 @@ public class MoveAlgorithm {
     }
 
     private Piece calculatePieceAttacked(TileUI[] chessBoard, int oldPosID,
-                                         int newPosID, String pieceMovedType) {
+                                         int newPosID, Piece pieceMoved) {
         Piece pieceAttacked = chessBoard[newPosID].getAssignedPiece();
         
-        if (pieceMovedType.equals("Pawn")
+        if (pieceMoved.getPieceType().equals("Pawn")
                 && oldPosID % 8 != newPosID % 8
                 && pieceAttacked == null) {
             int enpassantPosition = (newPosID % 8 - oldPosID % 8) + oldPosID;
             return chessBoard[enpassantPosition].getAssignedPiece();
 
-        } else if (pieceMovedType.equals("King")) {
-            int castlePosition;
-            if (newPosID - oldPosID > 0) {
-                castlePosition = newPosID + 1;
-            } else {
-                castlePosition = newPosID - 2;
+        } else if (pieceMoved.getPieceType().equals("King")
+                    && pieceMoved.getIsFirstMove()) {
+            if (newPosID - oldPosID == -2) {
+                return chessBoard[newPosID - 2].getAssignedPiece();
+            } else if (newPosID - oldPosID == 2){
+                return chessBoard[newPosID + 1].getAssignedPiece();
             }
-            return chessBoard[castlePosition].getAssignedPiece();
         }
         return pieceAttacked;
     }
@@ -123,18 +125,18 @@ public class MoveAlgorithm {
     }
 
     private void repaintChessBoard(TileUI[] chessBoard, Piece pieceAttacked,
-                                   int currentPosition, int finalPosition) {
-        chessBoard[currentPosition].resetTilePanel();
-        chessBoard[finalPosition].resetTilePanel();
-        if (pieceAttacked != null && isSpecialMove(pieceAttacked, finalPosition)) {
+                                   int oldPosID, int newPosID) {
+        chessBoard[oldPosID].resetTilePanel();
+        chessBoard[newPosID].resetTilePanel();
+        if (pieceAttacked != null && isSpecialMove(pieceAttacked, newPosID)) {
             chessBoard[pieceAttacked.getPiecePosition()].resetTilePanel();
 
             if (pieceAttacked.getPieceType().equals("Rook")) {
                 int castlePosition;
-                if (finalPosition - currentPosition > 0) {
-                    castlePosition = finalPosition + 1;
+                if (newPosID - oldPosID > 0) {
+                    castlePosition = newPosID + 1;
                 } else {
-                    castlePosition = finalPosition - 2;
+                    castlePosition = newPosID - 2;
                 }
                 chessBoard[castlePosition].resetTilePanel();
             }

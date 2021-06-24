@@ -85,8 +85,8 @@ public class TileUI extends Tile {
      */
     public void resetTilePanel() {
         tilePanel.removeAll();
-        repaintTilePanel();
         assignChessPieceImage();
+        repaintTilePanel();
     }
 
     /**
