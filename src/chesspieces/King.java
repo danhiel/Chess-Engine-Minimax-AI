@@ -1,6 +1,8 @@
 package chesspieces;
 
 import chessboard.TileUI;
+import gamestate.GameState;
+import gamestate.MoveAlgorithm;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,6 +43,24 @@ public class King extends Piece {
     }
 
     @Override
+    public Set<Integer> getAllLegalMoves(GameState gameState,
+                                         TileUI[] chessBoard,
+                                         MoveAlgorithm moveAlg) {
+        Set<Integer> allMoves = getAllMoves(chessBoard);
+        addCastlingMoves(allMoves, gameState, chessBoard);
+
+        Set<Integer> prunedMoves = new HashSet<Integer>();
+        for (int moveID : allMoves) {
+            moveAlg.simulateMovePieceToSquare(chessBoard, piecePosition, moveID);
+            if (!gameState.calcIfKingIsCheck(IS_WHITE_PIECE)) {
+                prunedMoves.add(moveID);
+            }
+            moveAlg.simulateUndoMove(chessBoard);
+        }
+        return prunedMoves;
+    }
+
+    @Override
     public Set<Integer> getAllMoves(TileUI[] chessBoard) {
         Set<Integer> allMoves = new HashSet<Integer>();
 
@@ -48,7 +68,6 @@ public class King extends Piece {
             int finalPosition = piecePosition + move;
 
             addNormalMoves(allMoves, chessBoard, finalPosition);
-            addCastlingMoves(allMoves, chessBoard);
         }
         return allMoves;
     }
@@ -63,19 +82,21 @@ public class King extends Piece {
         }
     }
 
-    private void addCastlingMoves(Set<Integer> allMoves, TileUI[] chessBoard) {
+    private void addCastlingMoves(Set<Integer> allMoves,
+                                  GameState gameState,
+                                  TileUI[] chessBoard) {
         if (isFirstMove) {
             Rook leftRook = getRook(chessBoard, true);
             Rook rightRook = getRook(chessBoard, false);
 
             if (leftRook != null 
                     && leftRook.getIsFirstMove() 
-                    && checkIfLeftCastlingLegal(chessBoard, leftRook)) {
+                    && checkIfLeftCastlingLegal(gameState, chessBoard, leftRook)) {
                 allMoves.add(piecePosition - 2);
             }
             if (rightRook != null 
                     && rightRook.getIsFirstMove()
-                    && checkIfRightCastlingLegal(chessBoard, rightRook)) {
+                    && checkIfRightCastlingLegal(gameState, chessBoard, rightRook)) {
                 allMoves.add(piecePosition + 2);
             }
         }
@@ -99,18 +120,24 @@ public class King extends Piece {
         }
     }
 
-    private boolean checkIfLeftCastlingLegal(TileUI[] chessBoard, Rook leftRook) {
+    private boolean checkIfLeftCastlingLegal(GameState gameState,
+                                             TileUI[] chessBoard,
+                                             Rook leftRook) {
+        Set<Integer> enemyMoves = gameState.getAllEnemyMoves(this.IS_WHITE_PIECE);
         for (int i = leftRook.piecePosition + 1; i < this.piecePosition; i++) {
-            if (chessBoard[i].getAssignedPiece() != null) {
+            if (chessBoard[i].getAssignedPiece() != null && !enemyMoves.contains(i)) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean checkIfRightCastlingLegal(TileUI[] chessBoard, Rook rightRook) {
+    private boolean checkIfRightCastlingLegal(GameState gameState,
+                                              TileUI[] chessBoard,
+                                              Rook rightRook) {
+        Set<Integer> enemyMoves = gameState.getAllEnemyMoves(this.IS_WHITE_PIECE);
         for (int i = rightRook.piecePosition - 1; i > this.piecePosition; i--) {
-            if (chessBoard[i].getAssignedPiece() != null) {
+            if (chessBoard[i].getAssignedPiece() != null && !enemyMoves.contains(i)) {
                 return false;
             }
         }

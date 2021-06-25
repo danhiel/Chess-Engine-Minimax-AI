@@ -52,6 +52,15 @@ public class GameState {
         return aliveBlackPieces;
     }
 
+    public Set<Integer> getAllEnemyMoves(boolean isWhiteSide) {
+        Set<Piece> alivePieces = isWhiteSide ? aliveBlackPieces : aliveWhitePieces;
+        Set<Integer> results = new HashSet<Integer>();
+        for (Piece piece : alivePieces) {
+            results.addAll(piece.getAllMoves(chessBoard));
+        }
+        return results;
+    }
+
     /**
      * Returns whether the given side has their king check or not.
      * 
@@ -65,7 +74,6 @@ public class GameState {
         for (Piece piece : alivePieces) {
             Set<Integer> allMoves = piece.getAllMoves(chessBoard);
             if (allMoves.contains(king.getPiecePosition())) {
-                System.out.println(allMoves.toString());
                 return true;
             }
         }
