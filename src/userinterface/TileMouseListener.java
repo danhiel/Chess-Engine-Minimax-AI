@@ -79,7 +79,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
                 transferPieceImageToDragLayer();
                 updatePieceImageLocation();
 
-            // Unselects piece if move is invalid.
+            // Unselects piece if move is invalid, otherwise move the piece to selected area.
             } else if (savedPiece != null) {
                 unhighlightAllMoves();
                 if (isPieceSelectedAlly(selectedPiece)) {
@@ -92,6 +92,10 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
                     if (savedMoves.contains(chessTile.getTileID())) {
                         moveAlg.movePieceToSquare(chessBoard, savedPiece.getPiecePosition(),
                                 chessTile.getTileID());
+                        if (gameState.calcIfKingIsCheck(savedPiece.getIsPieceWhite())) {
+                            System.out.println("King is check");
+                            // Create a UI to tell the user the king is checked.
+                        }
                     }
                     savedPiece = null;
                 }
