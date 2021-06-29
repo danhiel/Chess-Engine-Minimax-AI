@@ -26,6 +26,7 @@ import java.util.Stack;
  * @since   3/28/2021
  */
 public class StartUI {
+    
     private final JFrame frame;
     private final JPanel mainPanel;
     private final JButton buttonWhiteSide;

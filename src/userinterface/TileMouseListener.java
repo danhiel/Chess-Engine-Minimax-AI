@@ -92,7 +92,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
                     if (savedMoves.contains(chessTile.getTileID())) {
                         moveAlg.movePieceToSquare(chessBoard, savedPiece.getPiecePosition(),
                                 chessTile.getTileID());
-                        if (gameState.calcIfKingIsCheck(savedPiece.getIsPieceWhite())) {
+                        if (gameState.calcIfKingIsCheck(!savedPiece.getIsPieceWhite())) {
                             System.out.println("King is check");
                             // Create a UI to tell the user the king is checked.
                         }
@@ -135,6 +135,10 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
                     savedPieceImage = null;
                     moveAlg.movePieceToSquare(chessBoard,
                             savedPiece.getPiecePosition(), total);
+                    if (gameState.calcIfKingIsCheck(!savedPiece.getIsPieceWhite())) {
+                            System.out.println("King is check");
+                            // Create a UI to tell the user the king is checked.
+                    }
                 } else {
                     chessTile.setPieceImage(savedPieceImage);
                     boardJLayeredPane.repaint();
