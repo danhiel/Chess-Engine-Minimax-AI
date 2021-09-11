@@ -40,16 +40,16 @@ public class MoveAlgorithm {
         MoveHistory recentMove = moveHistory.peek();
         simulateUndoMove(chessBoard);
         repaintChessBoard(chessBoard, recentMove.getPieceAttacked(),
-                          recentMove.getOldPieceMovedPos(),
-                          recentMove.getOldPieceAttackedPos());
+                          recentMove.getPieceMovedPos(),
+                          recentMove.getPieceAttackedPos());
     }
 
     public void simulateUndoMove(TileUI[] chessBoard) {
         MoveHistory recentMove = moveHistory.pop();
         Piece pieceMoved = recentMove.getPieceMoved();
         Piece pieceAttacked = recentMove.getPieceAttacked();
-        int fromPositionID = recentMove.getOldPieceMovedPos();
-        int toPositionID = recentMove.getOldPieceAttackedPos();
+        int fromPositionID = recentMove.getPieceMovedPos();
+        int toPositionID = recentMove.getPieceAttackedPos();
         
         // Update pieceMoved chessboard positions
         chessBoard[pieceMoved.getPiecePosition()].setAssignedPiece(null);

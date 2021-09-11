@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.Stack;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -93,8 +94,9 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
                         moveAlg.movePieceToSquare(chessBoard, savedPiece.getPiecePosition(),
                                 chessTile.getTileID());
                         if (gameState.calcIfKingIsCheck(!savedPiece.getIsPieceWhite())) {
-                            System.out.println("King is check");
-                            // Create a UI to tell the user the king is checked.
+                            if (getAllLegalEnemyMoves(savedPiece.getIsPieceWhite()).isEmpty()) {
+                                System.out.println("Checkmate");
+                            }
                         }
                     }
                     savedPiece = null;
@@ -173,6 +175,17 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     public void mouseExited(MouseEvent e) {}
 
     public void mouseMoved(MouseEvent e) {}
+
+    
+    public Set<Integer> getAllLegalEnemyMoves(boolean isWhiteSide) {
+        Set<Piece> alivePieces = isWhiteSide ? gameState.getAliveBlackPieces() : gameState.getAliveWhitePieces();
+        Set<Integer> results = new HashSet<Integer>();
+        for (Piece piece : alivePieces) {
+            results.addAll(piece.getAllLegalMoves(gameState, chessBoard, moveAlg));
+        }
+        System.out.println(results.toString());
+        return results;
+    }
 
     /**
      * Returns true if the selected piece is the players turn.
