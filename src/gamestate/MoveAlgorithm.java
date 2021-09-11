@@ -128,6 +128,8 @@ public class MoveAlgorithm {
                                    int oldPosID, int newPosID) {
         chessBoard[oldPosID].resetTilePanel();
         chessBoard[newPosID].resetTilePanel();
+
+        // If pieceAttacked was castled then repaint the tiles affected by castling
         if (pieceAttacked != null && isSpecialMove(pieceAttacked, newPosID)) {
             chessBoard[pieceAttacked.getPiecePosition()].resetTilePanel();
 
