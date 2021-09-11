@@ -37,11 +37,20 @@ public class MoveAlgorithm {
     }
 
     public void undoMove(TileUI[] chessBoard) {
-        MoveHistory recentMove = moveHistory.peek();
-        simulateUndoMove(chessBoard);
-        repaintChessBoard(chessBoard, recentMove.getPieceAttacked(),
-                          recentMove.getPieceMovedPos(),
-                          recentMove.getPieceAttackedPos());
+        if (!moveHistory.isEmpty()) {
+            MoveHistory recentMove = moveHistory.peek();
+            Piece pieceAttacked = recentMove.getPieceAttacked();
+            int oldPos = recentMove.getPieceMovedPos();
+            int newPos = recentMove.getPieceAttackedPos();
+            if (pieceAttacked == null) {
+                newPos = recentMove.getPieceMoved().getPiecePosition();
+            } else if (pieceAttacked.getPieceType() == "Pawn" &&
+                        (newPos == oldPos + 1 || newPos == oldPos - 1)) {
+                newPos = recentMove.getPieceMoved().getPiecePosition();
+            }
+            simulateUndoMove(chessBoard);
+            repaintChessBoard(chessBoard, pieceAttacked, oldPos, newPos);
+        }
     }
 
     public void simulateUndoMove(TileUI[] chessBoard) {
