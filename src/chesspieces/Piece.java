@@ -61,7 +61,7 @@ public abstract class Piece {
         Set<Integer> prunedMoves = new HashSet<Integer>();
         for (int moveID : allMoves) {
             moveAlg.simulateMovePieceToSquare(chessBoard, piecePosition, moveID);
-            if (!gameState.calcIfKingIsCheck(IS_WHITE_PIECE)) {
+            if (!gameState.calcIfAllyKingIsCheck(IS_WHITE_PIECE)) {
                 prunedMoves.add(moveID);
             }
             moveAlg.simulateUndoMove(chessBoard);

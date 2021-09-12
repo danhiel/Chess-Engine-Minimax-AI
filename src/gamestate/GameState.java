@@ -67,13 +67,13 @@ public class GameState {
      * @param isWhiteSide true if white side, false if not.
      * @return true if the given side has their king check, false otherwise.
      */
-    public boolean calcIfKingIsCheck(boolean isWhiteSide) {
-        Set<Piece> alivePieces = isWhiteSide ? aliveBlackPieces : aliveWhitePieces;
-        Piece king = isWhiteSide ? whiteKing : blackKing;
+    public boolean calcIfAllyKingIsCheck(boolean isWhiteSide) {
+        Set<Piece> enemyAlivePieces = isWhiteSide ? aliveBlackPieces : aliveWhitePieces;
+        Piece allyKing = isWhiteSide ? whiteKing : blackKing;
 
-        for (Piece piece : alivePieces) {
-            Set<Integer> allMoves = piece.getAllMoves(chessBoard);
-            if (allMoves.contains(king.getPiecePosition())) {
+        for (Piece enemyPiece : enemyAlivePieces) {
+            Set<Integer> allMoves = enemyPiece.getAllMoves(chessBoard);
+            if (allMoves.contains(allyKing.getPiecePosition())) {
                 return true;
             }
         }

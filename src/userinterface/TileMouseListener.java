@@ -60,7 +60,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     }
 
     /**
-     * When the mouse is pressed, highlight the chesspiece the mouse is placed on.
+     * When the mouse is pressed, perform the corresponding chess action.
      */
     @Override
     public void mousePressed(MouseEvent e) {
@@ -94,7 +94,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
                         if (savedMoves.contains(chessTile.getTileID())) {
                             moveAlg.movePieceToSquare(chessBoard, savedPiece.getPiecePosition(),
                                     chessTile.getTileID());
-                            if (gameState.calcIfKingIsCheck(!savedPiece.getIsPieceWhite())) {
+                            if (gameState.calcIfAllyKingIsCheck(!savedPiece.getIsPieceWhite())) {
                                 if (getAllLegalEnemyMoves(savedPiece.getIsPieceWhite()).isEmpty()) {
                                     System.out.println("Checkmate");
                                 }
@@ -139,7 +139,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
                     savedPieceImage = null;
                     moveAlg.movePieceToSquare(chessBoard,
                             savedPiece.getPiecePosition(), total);
-                    if (gameState.calcIfKingIsCheck(!savedPiece.getIsPieceWhite())) {
+                    if (gameState.calcIfAllyKingIsCheck(!savedPiece.getIsPieceWhite())) {
                             System.out.println("King is check");
                             // Create a UI to tell the user the king is checked.
                     }
