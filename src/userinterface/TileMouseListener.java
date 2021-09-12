@@ -64,42 +64,44 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
      */
     @Override
     public void mousePressed(MouseEvent e) {
-        Piece selectedPiece = chessTile.getAssignedPiece();
-        if (isRespectivePlayersTurn(selectedPiece)) {
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            Piece selectedPiece = chessTile.getAssignedPiece();
+            if (isRespectivePlayersTurn(selectedPiece)) {
 
-            // Unselects the selected piece.
-            if (savedPiece == selectedPiece) {
-                unhighlightAllMoves();
-                savedPiece = null;
+                // Unselects the selected piece.
+                if (savedPiece == selectedPiece) {
+                    unhighlightAllMoves();
+                    savedPiece = null;
 
-            // Selects a piece.
-            } else if (selectedPiece != null && savedPiece == null) {
-                savedPiece = selectedPiece;
-                savedMoves = selectedPiece.getAllLegalMoves(gameState, chessBoard, moveAlg);
-                highlightAllMoves();
-                transferPieceImageToDragLayer();
-                updatePieceImageLocation();
-
-            // Unselects piece if move is invalid, otherwise move the piece to selected area.
-            } else if (savedPiece != null) {
-                unhighlightAllMoves();
-                if (isPieceSelectedAlly(selectedPiece)) {
+                // Selects a piece.
+                } else if (selectedPiece != null && savedPiece == null) {
                     savedPiece = selectedPiece;
                     savedMoves = selectedPiece.getAllLegalMoves(gameState, chessBoard, moveAlg);
                     highlightAllMoves();
                     transferPieceImageToDragLayer();
                     updatePieceImageLocation();
-                } else {
-                    if (savedMoves.contains(chessTile.getTileID())) {
-                        moveAlg.movePieceToSquare(chessBoard, savedPiece.getPiecePosition(),
-                                chessTile.getTileID());
-                        if (gameState.calcIfKingIsCheck(!savedPiece.getIsPieceWhite())) {
-                            if (getAllLegalEnemyMoves(savedPiece.getIsPieceWhite()).isEmpty()) {
-                                System.out.println("Checkmate");
+
+                // Unselects piece if move is invalid, otherwise move the piece to selected area.
+                } else if (savedPiece != null) {
+                    unhighlightAllMoves();
+                    if (isPieceSelectedAlly(selectedPiece)) {
+                        savedPiece = selectedPiece;
+                        savedMoves = selectedPiece.getAllLegalMoves(gameState, chessBoard, moveAlg);
+                        highlightAllMoves();
+                        transferPieceImageToDragLayer();
+                        updatePieceImageLocation();
+                    } else {
+                        if (savedMoves.contains(chessTile.getTileID())) {
+                            moveAlg.movePieceToSquare(chessBoard, savedPiece.getPiecePosition(),
+                                    chessTile.getTileID());
+                            if (gameState.calcIfKingIsCheck(!savedPiece.getIsPieceWhite())) {
+                                if (getAllLegalEnemyMoves(savedPiece.getIsPieceWhite()).isEmpty()) {
+                                    System.out.println("Checkmate");
+                                }
                             }
                         }
+                        savedPiece = null;
                     }
-                    savedPiece = null;
                 }
             }
         }
@@ -166,6 +168,10 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
      */
     public void mouseClicked(MouseEvent e) {
         if (SwingUtilities.isRightMouseButton(e)) {
+            if (savedPiece != null) {
+                unhighlightAllMoves();
+                savedPiece = null;
+            }
             moveAlg.undoMove(chessBoard);
         }
     }
