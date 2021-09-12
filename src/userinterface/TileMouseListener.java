@@ -184,7 +184,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
 
     
     public Set<Integer> getAllLegalEnemyMoves(boolean isWhiteSide) {
-        Set<Piece> alivePieces = isWhiteSide ? gameState.getAliveBlackPieces() : gameState.getAliveWhitePieces();
+        Set<Piece> alivePieces = isWhiteSide ? gameState.getBlackPieces() : gameState.getWhitePieces();
         Set<Integer> results = new HashSet<Integer>();
         for (Piece piece : alivePieces) {
             results.addAll(piece.getAllLegalMoves(gameState, chessBoard, moveAlg));
