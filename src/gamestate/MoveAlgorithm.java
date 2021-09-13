@@ -25,6 +25,7 @@ public class MoveAlgorithm {
     public void simulateMovePieceToSquare(TileUI[] chessBoard,
                                           int oldPosID,
                                           int newPosID) {
+        System.out.println(oldPosID);
         Piece pieceMoved = chessBoard[oldPosID].getAssignedPiece();
         pieceAttacked = calculatePieceAttacked(chessBoard, oldPosID,
                                                newPosID, pieceMoved);
