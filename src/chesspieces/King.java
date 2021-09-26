@@ -66,7 +66,6 @@ public class King extends Piece {
 
         for (int move : KING_MOVE_SET) {
             int finalPosition = piecePosition + move;
-
             addNormalMoves(allMoves, chessBoard, finalPosition);
         }
         return allMoves;
