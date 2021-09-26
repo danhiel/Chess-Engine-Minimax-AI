@@ -38,14 +38,6 @@ public class GameState {
         return chessBoard;
     }
 
-    public Piece getWhiteKing() {
-        return whiteKing;
-    }
-
-    public Piece getBlackKing() {
-        return blackKing;
-    }
-
     public Set<Integer> getAllEnemyMoves(boolean isWhiteSide) {
         Set<Piece> enemyAllPieces = isWhiteSide ? blackPieces : whitePieces;
         Set<Integer> results = new HashSet<Integer>();
