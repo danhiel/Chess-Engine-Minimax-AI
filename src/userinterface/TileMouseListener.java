@@ -42,7 +42,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
      * @param chessTile the given singular tile taken from the chessboard.
      * @param chessBoard the main chessboard that tracks board-state.
      * @param boardJLayeredPane the layered pane that will help track mouse position.
-     * @param moveAlg controls piece movement in the game.
+     * @param moveAlg manipulates chess piece movement wihtin the main chessboard.
      * @param moveHistory tracks move history.
      */
     public TileMouseListener(TileUI chessTile,

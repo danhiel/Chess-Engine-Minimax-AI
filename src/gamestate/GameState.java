@@ -6,6 +6,14 @@ import java.util.Set;
 import chessboard.TileUI;
 import chesspieces.Piece;
 
+/**
+ * Keeps track of the game state: Retrieves enemy moves and calculates
+ * whether either kings are check.
+ *
+ * @author  Danhiel Vu
+ * @version 1.0
+ * @since   3/28/2020
+ */
 public class GameState {
 
     private TileUI[] chessBoard;
@@ -17,6 +25,13 @@ public class GameState {
     private Set<Piece> whitePieces;
     private Set<Piece> blackPieces;
     
+    /**
+     * Constructor for the GameState class. Tracks all black and white pieces.
+     * 
+     * @param chessBoard the main chessboard that tracks board-state.
+     * @param moveAlgorithm manipulates chess piece movement wihtin the main chessboard.
+     * @param isWhiteSide true if the player is white sided, false otherwise.
+     */
     public GameState(TileUI[] chessBoard, MoveAlgorithm moveAlgorithm, boolean isWhiteSide) {
         this.chessBoard = chessBoard;
         this.moveAlgorithm = moveAlgorithm;
@@ -34,10 +49,22 @@ public class GameState {
         }
     }
 
+    /**
+     * Returns the chessboard.
+     * 
+     * @return TileUI chessboard.
+     */
     public TileUI[] getChessBoard() {
         return chessBoard;
     }
 
+    /**
+     * Returns the set of all enemy moves.
+     * 
+     * @param isWhiteSide true if ally is white side, false otherwise.
+     * @return set of integers representing the tile ID the enemy can move to without
+     * checking if the King is in check.
+     */
     public Set<Integer> getAllEnemyMoves(boolean isWhiteSide) {
         Set<Piece> enemyAllPieces = isWhiteSide ? blackPieces : whitePieces;
         Set<Integer> results = new HashSet<Integer>();
@@ -50,6 +77,12 @@ public class GameState {
         return results;
     }
 
+    /**
+     * Returns the set of all legal enemy moves.
+     * 
+     * @param isWhiteSide true if ally is white side, false otherwise.
+     * @return set of integers representing the tile ID the enemy can move to.
+     */
     public Set<Integer> getAllLegalEnemyMoves(boolean isWhiteSide) {
         Set<Piece> alivePieces = isWhiteSide ? blackPieces : whitePieces;
         Set<Integer> results = new HashSet<Integer>();
