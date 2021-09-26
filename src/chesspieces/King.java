@@ -90,12 +90,12 @@ public class King extends Piece {
 
             if (leftRook != null 
                     && leftRook.getIsFirstMove() 
-                    && checkIfLeftCastlingLegal(gameState, chessBoard, leftRook)) {
+                    && !getIsLeftCastlingThreatened(gameState, chessBoard, leftRook)) {
                 allMoves.add(piecePosition - 2);
             }
             if (rightRook != null 
                     && rightRook.getIsFirstMove()
-                    && checkIfRightCastlingLegal(gameState, chessBoard, rightRook)) {
+                    && !getIsRightCastlingThreatened(gameState, chessBoard, rightRook)) {
                 allMoves.add(piecePosition + 2);
             }
         }
@@ -105,7 +105,8 @@ public class King extends Piece {
         int rookPosition = getRookPosition(isLeftSide);
         Piece chessPiece = chessBoard[rookPosition].getAssignedPiece();
         if (chessPiece != null 
-            && chessPiece.getPieceType() == "Rook") {
+            && chessPiece.getPieceType() == "Rook"
+            && chessPiece.getIsPieceWhite() == this.IS_WHITE_PIECE) {
             return (Rook) chessPiece;
         }
         return null;
@@ -119,35 +120,35 @@ public class King extends Piece {
         }
     }
 
-    private boolean checkIfLeftCastlingLegal(GameState gameState,
+    private boolean getIsLeftCastlingThreatened(GameState gameState,
                                              TileUI[] chessBoard,
                                              Rook leftRook) {
         Set<Integer> enemyMoves = gameState.getAllEnemyMoves(this.IS_WHITE_PIECE);
         if (enemyMoves.contains(leftRook.piecePosition) 
             || enemyMoves.contains(this.piecePosition)) {
-            return false;
+            return true;
         }
         for (int i = leftRook.piecePosition + 1; i < this.piecePosition; i++) {
             if (chessBoard[i].getAssignedPiece() != null || enemyMoves.contains(i)) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
-    private boolean checkIfRightCastlingLegal(GameState gameState,
+    private boolean getIsRightCastlingThreatened(GameState gameState,
                                               TileUI[] chessBoard,
                                               Rook rightRook) {
         Set<Integer> enemyMoves = gameState.getAllEnemyMoves(this.IS_WHITE_PIECE);
         if (enemyMoves.contains(rightRook.piecePosition) 
             || enemyMoves.contains(this.piecePosition)) {
-            return false;
+            return true;
         }
         for (int i = rightRook.piecePosition - 1; i > this.piecePosition; i--) {
             if (chessBoard[i].getAssignedPiece() != null || enemyMoves.contains(i)) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }

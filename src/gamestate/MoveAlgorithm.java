@@ -26,7 +26,7 @@ public class MoveAlgorithm {
                                           int oldPosID,
                                           int newPosID) {
         Piece pieceMoved = chessBoard[oldPosID].getAssignedPiece();
-        pieceAttacked = calculatePieceAttacked(chessBoard, oldPosID,
+        this.pieceAttacked = calculatePieceAttacked(chessBoard, oldPosID,
                                                newPosID, pieceMoved);
 
         saveMoveToHistory(pieceMoved, pieceAttacked);
@@ -42,9 +42,11 @@ public class MoveAlgorithm {
             Piece pieceAttacked = recentMove.getPieceAttacked();
             int oldPos = recentMove.getPieceMovedPos();
             int newPos = recentMove.getPieceAttackedPos();
+            
+            // updates newPos if the piece attacked was done by en passant rule.
             if (pieceAttacked == null) {
                 newPos = recentMove.getPieceMoved().getPiecePosition();
-            } else if (pieceAttacked.getPieceType() == "Pawn" &&
+            } else if (pieceAttacked.getPieceType().equals("Pawn") &&
                         (newPos == oldPos + 1 || newPos == oldPos - 1)) {
                 newPos = recentMove.getPieceMoved().getPiecePosition();
             }
@@ -74,47 +76,49 @@ public class MoveAlgorithm {
         }
     }
 
-    private Piece calculatePieceAttacked(TileUI[] chessBoard, int oldPosID,
-                                         int newPosID, Piece pieceMoved) {
-        Piece pieceAttacked = chessBoard[newPosID].getAssignedPiece();
+    private Piece calculatePieceAttacked(TileUI[] chessBoard, int moveFromID,
+                                         int moveToID, Piece pieceMoved) {
+        Piece pieceAttacked = chessBoard[moveToID].getAssignedPiece();
         
+        // Gets the pawn that was attacked by en passant.
         if (pieceMoved.getPieceType().equals("Pawn")
-                && oldPosID % 8 != newPosID % 8
+                && moveFromID % 8 != moveToID % 8
                 && pieceAttacked == null) {
-            int enpassantPosition = (newPosID % 8 - oldPosID % 8) + oldPosID;
+            int enpassantPosition = (moveToID % 8 - moveFromID % 8) + moveFromID;
             return chessBoard[enpassantPosition].getAssignedPiece();
 
+        // Gets piece rook if castling occurred.
         } else if (pieceMoved.getPieceType().equals("King")
                     && pieceMoved.getIsFirstMove()) {
-            if (newPosID - oldPosID == -2) {
-                return chessBoard[newPosID - 2].getAssignedPiece();
-            } else if (newPosID - oldPosID == 2){
-                return chessBoard[newPosID + 1].getAssignedPiece();
+            if (moveToID - moveFromID == -2) {
+                return chessBoard[moveToID - 2].getAssignedPiece();
+            } else if (moveToID - moveFromID == 2){
+                return chessBoard[moveToID + 1].getAssignedPiece();
             }
         }
         return pieceAttacked;
     }
 
     private void updatePiecePositions(TileUI[] chessBoard, Piece pieceMoved,
-                                      Piece pieceAttacked, int currentPosition,
-                                      int finalPosition) {
-        if (pieceAttacked != null && isSpecialMove(pieceAttacked, finalPosition)) {
+                                      Piece pieceAttacked, int moveFromID,
+                                      int moveToID) {
+        if (pieceAttacked != null && isSpecialMove(pieceAttacked, moveToID)) {
             chessBoard[pieceAttacked.getPiecePosition()].setAssignedPiece(null);
 
-            if (pieceAttacked.getPieceType().equals("Rook")) {
+            if (pieceAttacked.getIsPieceWhite() == pieceMoved.getIsPieceWhite()) {
                 int castlePosition;
-                if (finalPosition - currentPosition > 0) {
-                    castlePosition = finalPosition - 1;
+                if (moveToID - moveFromID > 0) {
+                    castlePosition = moveToID - 1;
                 } else {
-                    castlePosition = finalPosition + 1;
+                    castlePosition = moveToID + 1;
                 }
                 chessBoard[castlePosition].setAssignedPiece(pieceAttacked);
                 pieceAttacked.setPiecePosition(castlePosition);
             }
         }
-        pieceMoved.setPiecePosition(finalPosition);
-        chessBoard[currentPosition].setAssignedPiece(null);
-        chessBoard[finalPosition].setAssignedPiece(pieceMoved);
+        pieceMoved.setPiecePosition(moveToID);
+        chessBoard[moveFromID].setAssignedPiece(null);
+        chessBoard[moveToID].setAssignedPiece(pieceMoved);
     }
 
     private boolean isSpecialMove(Piece pieceAttacked, int finalPosition) {
@@ -133,24 +137,34 @@ public class MoveAlgorithm {
                                          pieceMoved.getIsFirstMove()));
     }
 
-    private void repaintChessBoard(TileUI[] chessBoard, Piece pieceAttacked,
-                                   int oldPosID, int newPosID) {
-        chessBoard[oldPosID].resetTilePanel();
-        chessBoard[newPosID].resetTilePanel();
+    private void repaintChessBoard(TileUI[] chessBoard,
+                                   Piece pieceAttacked,
+                                   int moveFromID, int moveToID) {
+        chessBoard[moveFromID].resetTilePanel();
+        chessBoard[moveToID].resetTilePanel();
 
-        // If pieceAttacked was castled then repaint the tiles affected by castling
-        if (pieceAttacked != null && isSpecialMove(pieceAttacked, newPosID)) {
-            chessBoard[pieceAttacked.getPiecePosition()].resetTilePanel();
+        // If recent move was a special move then repaint impacted tiles.
+        if (pieceAttacked != null) {
+            Piece pieceMoved = chessBoard[moveToID].getAssignedPiece();
 
-            if (pieceAttacked.getPieceType().equals("Rook")) {
-                int castlePosition;
-                if (newPosID - oldPosID > 0) {
-                    castlePosition = newPosID + 1;
-                } else {
-                    castlePosition = newPosID - 2;
+            // If recent move was en passant
+            if (pieceAttacked.getPiecePosition() != moveToID) {
+                chessBoard[pieceAttacked.getPiecePosition()].resetTilePanel();
+            
+            // If recent move was castled
+            }  else if (pieceMoved.getPieceType().equals("King") 
+                        && pieceMoved.getIsFirstMove()) {
+
+                if (moveFromID - moveToID == 2) {
+                    chessBoard[moveToID + 1].resetTilePanel();
+                    chessBoard[moveToID - 2].resetTilePanel();
+                } else if (moveFromID - moveToID == -2) {
+                    System.out.println("hi");
+                    chessBoard[moveToID + 1].resetTilePanel();
+                    chessBoard[moveToID - 1].resetTilePanel();
                 }
-                chessBoard[castlePosition].resetTilePanel();
             }
         }
+        System.out.println(moveFromID + " " + moveToID);
     }
 }
