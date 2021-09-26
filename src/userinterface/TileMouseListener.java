@@ -121,7 +121,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
             int height = comp.getSize().height / 8;
             int width = comp.getSize().width / 8;
 
-            // Get chessBoardJLayeredPane and use this to get the mouse position.
+            // Get chessBoardJLayeredPane and use this to get the mouse tile position.
             Component parentComp = comp.getComponentAt(comp.getParent().getMousePosition());
             int total = (parentComp.getLocation().y / height) * 8;
             total += parentComp.getLocation().x / width;
@@ -181,7 +181,6 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     public void mouseExited(MouseEvent e) {}
 
     public void mouseMoved(MouseEvent e) {}
-
     
     public Set<Integer> getAllLegalEnemyMoves(boolean isWhiteSide) {
         Set<Piece> alivePieces = isWhiteSide ? gameState.getAliveBlackPieces() : gameState.getAliveWhitePieces();
@@ -189,7 +188,6 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
         for (Piece piece : alivePieces) {
             results.addAll(piece.getAllLegalMoves(gameState, chessBoard, moveAlg));
         }
-        System.out.println(results.toString());
         return results;
     }
 

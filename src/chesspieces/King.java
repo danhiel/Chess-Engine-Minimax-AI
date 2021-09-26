@@ -137,6 +137,7 @@ public class King extends Piece {
                                               Rook rightRook) {
         Set<Integer> enemyMoves = gameState.getAllEnemyMoves(this.IS_WHITE_PIECE);
         for (int i = rightRook.piecePosition - 1; i > this.piecePosition; i--) {
+            System.out.println(rightRook.piecePosition - 1);
             if (chessBoard[i].getAssignedPiece() != null && !enemyMoves.contains(i)) {
                 return false;
             }
