@@ -12,7 +12,7 @@ import chesspieces.Piece;
  *
  * @author  Danhiel Vu
  * @version 1.0
- * @since   3/28/2020
+ * @since   9/25/2021
  */
 public class GameState {
 
