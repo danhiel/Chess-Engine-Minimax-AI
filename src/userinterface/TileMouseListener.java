@@ -95,7 +95,7 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
                             moveAlg.movePieceToSquare(chessBoard, savedPiece.getPiecePosition(),
                                     chessTile.getTileID());
                             if (gameState.calcIfAllyKingIsCheck(!savedPiece.getIsPieceWhite())) {
-                                if (getAllLegalEnemyMoves(savedPiece.getIsPieceWhite()).isEmpty()) {
+                                if (gameState.getAllLegalEnemyMoves(savedPiece.getIsPieceWhite()).isEmpty()) {
                                     System.out.println("Checkmate");
                                 }
                             }
@@ -181,15 +181,6 @@ public class TileMouseListener implements MouseListener, MouseMotionListener {
     public void mouseExited(MouseEvent e) {}
 
     public void mouseMoved(MouseEvent e) {}
-    
-    public Set<Integer> getAllLegalEnemyMoves(boolean isWhiteSide) {
-        Set<Piece> alivePieces = isWhiteSide ? gameState.getAliveBlackPieces() : gameState.getAliveWhitePieces();
-        Set<Integer> results = new HashSet<Integer>();
-        for (Piece piece : alivePieces) {
-            results.addAll(piece.getAllLegalMoves(gameState, chessBoard, moveAlg));
-        }
-        return results;
-    }
 
     /**
      * Returns true if the selected piece is the players turn.

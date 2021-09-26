@@ -9,6 +9,7 @@ import chesspieces.Piece;
 public class GameState {
 
     private TileUI[] chessBoard;
+    private MoveAlgorithm moveAlgorithm;
 
     private Piece whiteKing;
     private Piece blackKing;
@@ -16,8 +17,9 @@ public class GameState {
     private Set<Piece> whitePieces;
     private Set<Piece> blackPieces;
     
-    public GameState(TileUI[] chessBoard, boolean isWhiteSide) {
+    public GameState(TileUI[] chessBoard, MoveAlgorithm moveAlgorithm, boolean isWhiteSide) {
         this.chessBoard = chessBoard;
+        this.moveAlgorithm = moveAlgorithm;
 
         if (isWhiteSide) {
             this.whiteKing = chessBoard[60].getAssignedPiece();
@@ -44,14 +46,6 @@ public class GameState {
         return blackKing;
     }
 
-    public Set<Piece> getAliveWhitePieces() {
-        return whitePieces;
-    }
-
-    public Set<Piece> getAliveBlackPieces() {
-        return blackPieces;
-    }
-
     public Set<Integer> getAllEnemyMoves(boolean isWhiteSide) {
         Set<Piece> enemyAllPieces = isWhiteSide ? blackPieces : whitePieces;
         Set<Integer> results = new HashSet<Integer>();
@@ -59,6 +53,18 @@ public class GameState {
             Piece chessPiece = chessBoard[piece.getPiecePosition()].getAssignedPiece();
             if (chessPiece != null) {
                 results.addAll(chessPiece.getAllMoves(chessBoard));
+            }
+        }
+        return results;
+    }
+
+    public Set<Integer> getAllLegalEnemyMoves(boolean isWhiteSide) {
+        Set<Piece> alivePieces = isWhiteSide ? blackPieces : whitePieces;
+        Set<Integer> results = new HashSet<Integer>();
+        for (Piece piece : alivePieces) {
+            Piece chessPiece = chessBoard[piece.getPiecePosition()].getAssignedPiece();
+            if (chessPiece != null) {
+                results.addAll(piece.getAllLegalMoves(this, chessBoard, moveAlgorithm));
             }
         }
         return results;
