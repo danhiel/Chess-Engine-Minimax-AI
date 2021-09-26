@@ -92,13 +92,11 @@ public class King extends Piece {
             if (leftRook != null 
                     && leftRook.getIsFirstMove() 
                     && checkIfLeftCastlingLegal(gameState, chessBoard, leftRook)) {
-                System.out.println("what the fuck");
                 allMoves.add(piecePosition - 2);
             }
             if (rightRook != null 
                     && rightRook.getIsFirstMove()
                     && checkIfRightCastlingLegal(gameState, chessBoard, rightRook)) {
-                        System.out.println("what the fuck2");
                 allMoves.add(piecePosition + 2);
             }
         }
