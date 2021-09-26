@@ -142,26 +142,19 @@ public class MoveAlgorithm {
                                    int moveFromID, int moveToID) {
         chessBoard[moveFromID].resetTilePanel();
         chessBoard[moveToID].resetTilePanel();
+        System.out.println(pieceAttacked);
 
         // If recent move was a special move then repaint impacted tiles.
         if (pieceAttacked != null) {
             Piece pieceMoved = chessBoard[moveToID].getAssignedPiece();
+            chessBoard[pieceAttacked.getPiecePosition()].resetTilePanel();
 
-            // If recent move was en passant
-            if (pieceAttacked.getPiecePosition() != moveToID) {
-                chessBoard[pieceAttacked.getPiecePosition()].resetTilePanel();
-            
             // If recent move was castled
-            }  else if (pieceMoved.getPieceType().equals("King") 
-                        && pieceMoved.getIsFirstMove()) {
-
+            if (pieceMoved.getPieceType().equals("King")) {
                 if (moveFromID - moveToID == 2) {
-                    chessBoard[moveToID + 1].resetTilePanel();
                     chessBoard[moveToID - 2].resetTilePanel();
                 } else if (moveFromID - moveToID == -2) {
-                    System.out.println("hi");
                     chessBoard[moveToID + 1].resetTilePanel();
-                    chessBoard[moveToID - 1].resetTilePanel();
                 }
             }
         }
