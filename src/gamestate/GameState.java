@@ -50,9 +50,9 @@ public class GameState {
         Set<Piece> enemyAllPieces = isWhiteSide ? blackPieces : whitePieces;
         Set<Integer> results = new HashSet<Integer>();
         for (Piece piece : enemyAllPieces) {
-            Piece chessPiece = chessBoard[piece.getPiecePosition()].getAssignedPiece();
-            if (chessPiece != null) {
-                results.addAll(chessPiece.getAllMoves(chessBoard));
+            piece = chessBoard[piece.getPiecePosition()].getAssignedPiece();
+            if (piece != null) {
+                results.addAll(piece.getAllMoves(chessBoard));
             }
         }
         return results;
@@ -62,8 +62,8 @@ public class GameState {
         Set<Piece> alivePieces = isWhiteSide ? blackPieces : whitePieces;
         Set<Integer> results = new HashSet<Integer>();
         for (Piece piece : alivePieces) {
-            Piece chessPiece = chessBoard[piece.getPiecePosition()].getAssignedPiece();
-            if (chessPiece != null) {
+            piece = chessBoard[piece.getPiecePosition()].getAssignedPiece();
+            if (piece != null) {
                 results.addAll(piece.getAllLegalMoves(this, chessBoard, moveAlgorithm));
             }
         }
@@ -81,9 +81,12 @@ public class GameState {
         Piece allyKing = isWhiteSide ? whiteKing : blackKing;
 
         for (Piece enemyPiece : enemyAlivePieces) {
-            Set<Integer> allMoves = enemyPiece.getAllMoves(chessBoard);
-            if (allMoves.contains(allyKing.getPiecePosition())) {
-                return true;
+            enemyPiece = chessBoard[enemyPiece.getPiecePosition()].getAssignedPiece();
+            if (enemyPiece != null) {
+                Set<Integer> allMoves = enemyPiece.getAllMoves(chessBoard);
+                if (allMoves.contains(allyKing.getPiecePosition())) {
+                    return true;
+                }
             }
         }
         return false;
