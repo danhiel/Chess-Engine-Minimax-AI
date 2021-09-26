@@ -92,11 +92,13 @@ public class King extends Piece {
             if (leftRook != null 
                     && leftRook.getIsFirstMove() 
                     && checkIfLeftCastlingLegal(gameState, chessBoard, leftRook)) {
+                System.out.println("what the fuck");
                 allMoves.add(piecePosition - 2);
             }
             if (rightRook != null 
                     && rightRook.getIsFirstMove()
                     && checkIfRightCastlingLegal(gameState, chessBoard, rightRook)) {
+                        System.out.println("what the fuck2");
                 allMoves.add(piecePosition + 2);
             }
         }
@@ -124,8 +126,12 @@ public class King extends Piece {
                                              TileUI[] chessBoard,
                                              Rook leftRook) {
         Set<Integer> enemyMoves = gameState.getAllEnemyMoves(this.IS_WHITE_PIECE);
+        if (enemyMoves.contains(leftRook.piecePosition) 
+            || enemyMoves.contains(this.piecePosition)) {
+            return false;
+        }
         for (int i = leftRook.piecePosition + 1; i < this.piecePosition; i++) {
-            if (chessBoard[i].getAssignedPiece() != null && !enemyMoves.contains(i)) {
+            if (chessBoard[i].getAssignedPiece() != null || enemyMoves.contains(i)) {
                 return false;
             }
         }
@@ -136,9 +142,12 @@ public class King extends Piece {
                                               TileUI[] chessBoard,
                                               Rook rightRook) {
         Set<Integer> enemyMoves = gameState.getAllEnemyMoves(this.IS_WHITE_PIECE);
+        if (enemyMoves.contains(rightRook.piecePosition) 
+            || enemyMoves.contains(this.piecePosition)) {
+            return false;
+        }
         for (int i = rightRook.piecePosition - 1; i > this.piecePosition; i--) {
-            System.out.println(rightRook.piecePosition - 1);
-            if (chessBoard[i].getAssignedPiece() != null && !enemyMoves.contains(i)) {
+            if (chessBoard[i].getAssignedPiece() != null || enemyMoves.contains(i)) {
                 return false;
             }
         }

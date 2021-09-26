@@ -8,12 +8,10 @@ import java.util.Stack;
 public class MoveAlgorithm {
 
     private final Stack<MoveHistory> moveHistory;
-    private final GameState gameState;
     private Piece pieceAttacked;
     
-    public MoveAlgorithm(Stack<MoveHistory> moveHistory, GameState gameState) {
+    public MoveAlgorithm(Stack<MoveHistory> moveHistory) {
         this.moveHistory = moveHistory;
-        this.gameState = gameState;
         pieceAttacked = null;
     }
 
@@ -22,15 +20,11 @@ public class MoveAlgorithm {
                                   int newPosID) {
         simulateMovePieceToSquare(chessBoard, oldPosID, newPosID);
         repaintChessBoard(chessBoard, pieceAttacked, oldPosID, newPosID);
-        if (pieceAttacked != null) {
-            gameState.removePieceFromAlive(pieceAttacked);
-        }
     }
 
     public void simulateMovePieceToSquare(TileUI[] chessBoard,
                                           int oldPosID,
                                           int newPosID) {
-        System.out.println(oldPosID);
         Piece pieceMoved = chessBoard[oldPosID].getAssignedPiece();
         pieceAttacked = calculatePieceAttacked(chessBoard, oldPosID,
                                                newPosID, pieceMoved);
@@ -82,7 +76,6 @@ public class MoveAlgorithm {
 
     private Piece calculatePieceAttacked(TileUI[] chessBoard, int oldPosID,
                                          int newPosID, Piece pieceMoved) {
-        System.out.println(oldPosID);
         Piece pieceAttacked = chessBoard[newPosID].getAssignedPiece();
         
         if (pieceMoved.getPieceType().equals("Pawn")

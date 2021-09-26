@@ -13,8 +13,8 @@ public class GameState {
     private Piece whiteKing;
     private Piece blackKing;
 
-    private Set<Piece> aliveWhitePieces;
-    private Set<Piece> aliveBlackPieces;
+    private Set<Piece> whitePieces;
+    private Set<Piece> blackPieces;
     
     public GameState(TileUI[] chessBoard, boolean isWhiteSide) {
         this.chessBoard = chessBoard;
@@ -22,13 +22,13 @@ public class GameState {
         if (isWhiteSide) {
             this.whiteKing = chessBoard[60].getAssignedPiece();
             this.blackKing = chessBoard[4].getAssignedPiece();
-            this.aliveWhitePieces = saveChessPieces(48);
-            this.aliveBlackPieces = saveChessPieces(0);
+            this.whitePieces = saveChessPieces(48);
+            this.blackPieces = saveChessPieces(0);
         } else {
             this.whiteKing = chessBoard[4].getAssignedPiece();
             this.blackKing = chessBoard[60].getAssignedPiece();
-            this.aliveWhitePieces = saveChessPieces(0);
-            this.aliveBlackPieces = saveChessPieces(48);
+            this.whitePieces = saveChessPieces(0);
+            this.blackPieces = saveChessPieces(48);
         }
     }
 
@@ -45,34 +45,21 @@ public class GameState {
     }
 
     public Set<Piece> getAliveWhitePieces() {
-        return aliveWhitePieces;
+        return whitePieces;
     }
 
     public Set<Piece> getAliveBlackPieces() {
-        return aliveBlackPieces;
-    }
-
-    public void removePieceFromAlive(Piece chessPiece) {
-        if (chessPiece.getIsPieceWhite()) {
-            aliveWhitePieces.remove(chessPiece);
-        } else {
-            aliveBlackPieces.remove(chessPiece);
-        }
-    }
-
-    public void addPieceToAlive(Piece chessPiece) {
-        if (chessPiece.getIsPieceWhite()) {
-            aliveWhitePieces.add(chessPiece);
-        } else {
-            aliveBlackPieces.add(chessPiece);
-        }
+        return blackPieces;
     }
 
     public Set<Integer> getAllEnemyMoves(boolean isWhiteSide) {
-        Set<Piece> alivePieces = isWhiteSide ? aliveBlackPieces : aliveWhitePieces;
+        Set<Piece> enemyAllPieces = isWhiteSide ? blackPieces : whitePieces;
         Set<Integer> results = new HashSet<Integer>();
-        for (Piece piece : alivePieces) {
-            results.addAll(piece.getAllMoves(chessBoard));
+        for (Piece piece : enemyAllPieces) {
+            Piece chessPiece = chessBoard[piece.getPiecePosition()].getAssignedPiece();
+            if (chessPiece != null) {
+                results.addAll(chessPiece.getAllMoves(chessBoard));
+            }
         }
         return results;
     }
@@ -84,7 +71,7 @@ public class GameState {
      * @return true if the given side has their king check, false otherwise.
      */
     public boolean calcIfAllyKingIsCheck(boolean isWhiteSide) {
-        Set<Piece> enemyAlivePieces = isWhiteSide ? aliveBlackPieces : aliveWhitePieces;
+        Set<Piece> enemyAlivePieces = isWhiteSide ? blackPieces : whitePieces;
         Piece allyKing = isWhiteSide ? whiteKing : blackKing;
 
         for (Piece enemyPiece : enemyAlivePieces) {

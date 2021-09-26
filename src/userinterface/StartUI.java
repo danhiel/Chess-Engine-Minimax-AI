@@ -112,7 +112,7 @@ public class StartUI {
         Stack<MoveHistory> moveHistory = new Stack<MoveHistory>();
         DefaultGameBoard gameBoard = new DefaultGameBoard(moveHistory, isWhiteSide);
         GameState gameState = new GameState(gameBoard.getChessBoard(), isWhiteSide);
-        MoveAlgorithm moveAlgorithm = new MoveAlgorithm(moveHistory, gameState);
+        MoveAlgorithm moveAlgorithm = new MoveAlgorithm(moveHistory);
         GameUI gameUI = new GameUI(gameState, moveAlgorithm, moveHistory);
 
         gameUI.createGameUI();
