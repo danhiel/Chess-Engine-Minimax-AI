@@ -4,27 +4,27 @@ import chesspieces.Piece;
 
 public class MoveHistory {
 
-    private final int movedFromID;
-    private final int movedToID;
+    private final int oldPieceMovedID;
+    private final int oldPieceAttackedID;
     private final Piece pieceMoved;
     private final Piece pieceAttacked;
     private final boolean isFirstMove;
 
-    public MoveHistory(int movedFromID, int movedToID, Piece pieceMoved,
+    public MoveHistory(int oldPieceMovedID, int oldPieceAttackedID, Piece pieceMoved,
                        Piece pieceAttacked, boolean isFirstMove) {
-        this.movedFromID = movedFromID;
-        this.movedToID = movedToID;
+        this.oldPieceMovedID = oldPieceMovedID;
+        this.oldPieceAttackedID = oldPieceAttackedID;
         this.pieceMoved = pieceMoved;
         this.pieceAttacked = pieceAttacked;
         this.isFirstMove = isFirstMove;
     }
 
-    public int getMovedFromID() {
-        return movedFromID;
+    public int getOldPieceMovedID() {
+        return oldPieceMovedID;
     }
 
-    public int getMovedToID() {
-        return movedToID;
+    public int getOldPieceAttackedID() {
+        return oldPieceAttackedID;
     }
 
     public Piece getPieceMoved() {
