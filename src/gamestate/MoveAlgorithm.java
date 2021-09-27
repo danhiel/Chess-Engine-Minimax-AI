@@ -5,53 +5,77 @@ import chesspieces.*;
 
 import java.util.Stack;
 
+/**
+ * The Move Algorithm that updates the main chess board and the pieces position.
+ *
+ * @author  Danhiel Vu
+ * @version 1.0
+ * @since   3/28/2021
+ */
 public class MoveAlgorithm {
 
     private final Stack<MoveHistory> moveHistory;
     private Piece pieceAttacked;
     
+    /**
+     * Constructor for the MoveAlgorithm class.
+     * @param moveHistory tracks the move history.
+     */
     public MoveAlgorithm(Stack<MoveHistory> moveHistory) {
         this.moveHistory = moveHistory;
         pieceAttacked = null;
     }
 
+    /**
+     * Moves a piece from it's old tile ID to the new old tile ID and
+     * updates the chess board UI.
+     * 
+     * @param chessBoard the main chessboard that tracks board-state.
+     * @param moveFromID the tile ID the piece is moving from.
+     * @param moveToID the tile ID the piece is moving to.
+     */
     public void movePieceToSquare(TileUI[] chessBoard,
-                                  int oldPosID,
-                                  int newPosID) {
-        simulateMovePieceToSquare(chessBoard, oldPosID, newPosID);
-        repaintChessBoard(chessBoard, pieceAttacked, oldPosID, newPosID);
+                                  int moveFromID,
+                                  int moveToID) {
+        simulateMovePieceToSquare(chessBoard, moveFromID, moveToID);
+        repaintChessBoard(chessBoard, pieceAttacked,
+                          chessBoard[moveToID].getAssignedPiece(),
+                          moveFromID, moveToID);
     }
 
+    /**
+     * Moves a piece from it's old tile ID to the new old tile ID withou
+     * updating the chess board UI.
+     * 
+     * @param chessBoard the main chessboard that tracks board-state.
+     * @param moveFromID the tile ID the piece is moving from.
+     * @param moveToID the tile ID the piece is moving to.
+     */
     public void simulateMovePieceToSquare(TileUI[] chessBoard,
-                                          int oldPosID,
-                                          int newPosID) {
-        Piece pieceMoved = chessBoard[oldPosID].getAssignedPiece();
-        this.pieceAttacked = calculatePieceAttacked(chessBoard, oldPosID,
-                                               newPosID, pieceMoved);
+                                          int moveFromID,
+                                          int moveToID) {
+        Piece pieceMoved = chessBoard[moveFromID].getAssignedPiece();
+        this.pieceAttacked = calculatePieceAttacked(chessBoard, moveFromID,
+                                               moveToID, pieceMoved);
 
-        saveMoveToHistory(pieceMoved, pieceAttacked);
+        saveMoveToHistory(moveToID, pieceMoved, pieceAttacked);
         pieceMoved.setIsFirstMove(false);
         updatePiecePositions(chessBoard, pieceMoved,
-                             pieceAttacked, oldPosID,
-                             newPosID);
+                             pieceAttacked, moveFromID,
+                             moveToID);
     }
 
     public void undoMove(TileUI[] chessBoard) {
         if (!moveHistory.isEmpty()) {
             MoveHistory recentMove = moveHistory.peek();
             Piece pieceAttacked = recentMove.getPieceAttacked();
-            int oldPos = recentMove.getPieceMovedPos();
-            int newPos = recentMove.getPieceAttackedPos();
+            int movedFromID = recentMove.getMovedFromID();
+            int movedToID = recentMove.getMovedToID();
             
-            // updates newPos if the piece attacked was done by en passant rule.
-            if (pieceAttacked == null) {
-                newPos = recentMove.getPieceMoved().getPiecePosition();
-            } else if (pieceAttacked.getPieceType().equals("Pawn") &&
-                        (newPos == oldPos + 1 || newPos == oldPos - 1)) {
-                newPos = recentMove.getPieceMoved().getPiecePosition();
-            }
             simulateUndoMove(chessBoard);
-            repaintChessBoard(chessBoard, pieceAttacked, oldPos, newPos);
+            repaintChessBoard(chessBoard, pieceAttacked,
+                              chessBoard[movedFromID].getAssignedPiece(),
+                              movedFromID, movedToID);
         }
     }
 
@@ -59,20 +83,18 @@ public class MoveAlgorithm {
         MoveHistory recentMove = moveHistory.pop();
         Piece pieceMoved = recentMove.getPieceMoved();
         Piece pieceAttacked = recentMove.getPieceAttacked();
-        int fromPositionID = recentMove.getPieceMovedPos();
-        int toPositionID = recentMove.getPieceAttackedPos();
+        int movedFromID = recentMove.getMovedFromID();
+        int movedToID = recentMove.getMovedToID();
         
         // Update pieceMoved chessboard positions
-        chessBoard[pieceMoved.getPiecePosition()].setAssignedPiece(null);
-        chessBoard[fromPositionID].setAssignedPiece(pieceMoved);
-        pieceMoved.setPiecePosition(fromPositionID);
+        chessBoard[movedToID].setAssignedPiece(null);
+        chessBoard[movedFromID].setAssignedPiece(pieceMoved);
+        pieceMoved.setPiecePosition(movedFromID);
         pieceMoved.setIsFirstMove(recentMove.isFirstMove());
 
         // Update pieceAttacked chessboard positions
         if (pieceAttacked != null) {
-            chessBoard[pieceAttacked.getPiecePosition()].setAssignedPiece(null);
-            chessBoard[toPositionID].setAssignedPiece(pieceAttacked);
-            pieceAttacked.setPiecePosition(toPositionID);
+            chessBoard[pieceAttacked.getPiecePosition()].setAssignedPiece(pieceAttacked);
         }
     }
 
@@ -85,6 +107,7 @@ public class MoveAlgorithm {
                 && moveFromID % 8 != moveToID % 8
                 && pieceAttacked == null) {
             int enpassantPosition = (moveToID % 8 - moveFromID % 8) + moveFromID;
+            System.out.println("ayeee");
             return chessBoard[enpassantPosition].getAssignedPiece();
 
         // Gets piece rook if castling occurred.
@@ -125,29 +148,32 @@ public class MoveAlgorithm {
         return pieceAttacked.getPiecePosition() != finalPosition;
     }
 
-    private void saveMoveToHistory(Piece pieceMoved, Piece pieceAttacked) {
-        int pieceAttackedPos = -1;
-        if (pieceAttacked != null) {
-            pieceAttackedPos = pieceAttacked.getPiecePosition();
-        }
+    /**
+     * Save a move to the MoveHistory.
+     * 
+     * @param moveToID the tile ID the piece is moving to.
+     * @param pieceMoved the piece that is being moved.
+     * @param pieceAttacked the piece that was impacted by the piece moved.
+     */
+    private void saveMoveToHistory(int moveToID, Piece pieceMoved, Piece pieceAttacked) {
         moveHistory.push(new MoveHistory(pieceMoved.getPiecePosition(),
-                                         pieceAttackedPos,
+                                         moveToID,
                                          pieceMoved,
                                          pieceAttacked,
                                          pieceMoved.getIsFirstMove()));
     }
 
     private void repaintChessBoard(TileUI[] chessBoard,
-                                   Piece pieceAttacked,
+                                   Piece pieceAttacked, Piece pieceMoved,
                                    int moveFromID, int moveToID) {
         chessBoard[moveFromID].resetTilePanel();
         chessBoard[moveToID].resetTilePanel();
-        System.out.println(pieceAttacked);
+        //System.out.println(pieceAttacked);
 
         // If recent move was a special move then repaint impacted tiles.
         if (pieceAttacked != null) {
-            Piece pieceMoved = chessBoard[moveToID].getAssignedPiece();
             chessBoard[pieceAttacked.getPiecePosition()].resetTilePanel();
+            System.out.println(pieceAttacked.getPiecePosition());
 
             // If recent move was castled
             if (pieceMoved.getPieceType().equals("King")) {
