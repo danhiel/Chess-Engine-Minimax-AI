@@ -143,6 +143,12 @@ public class MoveAlgorithm {
                 pieceAttacked.setPiecePosition(castlePosition);
             }
         }
+
+        if (pieceMoved.getPieceType() == "Pawn") {
+            if ((moveToID >= 0 && moveToID < 8) || (moveToID >= 56 && moveToID < 64)) {
+            }
+        }
+
         pieceMoved.setPiecePosition(moveToID);
         chessBoard[moveFromID].setAssignedPiece(null);
         chessBoard[moveToID].setAssignedPiece(pieceMoved);
